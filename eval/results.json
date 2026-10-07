@@ -1,0 +1,1031 @@
+{
+  "config": {
+    "eval_file": "/content/repo/data/eval.json",
+    "n_samples": 50,
+    "base_model": "unsloth/Llama-3.2-3B-Instruct",
+    "adapter": "mrchrislau/feedback-to-gherkin-lora",
+    "max_new_tokens": 512,
+    "decoding": "greedy",
+    "mock": false
+  },
+  "summary": {
+    "base": {
+      "n": 50,
+      "gherkin_compliance": 0.0,
+      "preamble_rate": 0.0,
+      "avg_output_tokens": 157.4,
+      "avg_output_chars": 780.9,
+      "avg_gen_seconds": 5.668
+    },
+    "finetuned": {
+      "n": 50,
+      "gherkin_compliance": 1.0,
+      "preamble_rate": 0.0,
+      "avg_output_tokens": 160.4,
+      "avg_output_chars": 861.1,
+      "avg_gen_seconds": 8.595
+    }
+  },
+  "samples": [
+    {
+      "id": "reports-008",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 233,
+        "output_chars": 1065,
+        "gen_seconds": 7.806,
+        "text": "PROBLEM STATEMENT:\nThe current insights platform workbook export fails for date ranges over 90 days, resulting in manual conversion of CSV exports, which is unsustainable for quarterly reporting.\n\nUSER STORY:\nAs a marketing operations manager, I want to automate the workbook export for date ranges over 90 days, so that I can reduce the time spent on manual conversion and improve the efficiency of quarterly reporting.\n\nACCEPTANCE CRITERIA:\nScenario: The workbook export is generated for a date range of 91 days.\nGiven: The date range is set to 91 days.\nWhen: The export is triggered.\nThen: The export is successful and does not fail due to the date range.\n\nScenario: The workbook export is generated for a date range of 91 days.\nGiven: The date range is set to 90 days.\nWhen: The export is triggered.\nThen: The export fails due to the date range.\n\nScenario: The workbook export is generated for a date range of 91 days.\nGiven: The date range is set to 90 days.\nAnd: The export is triggered.\nThen: The export is successful and does not fail due to the date range."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 808,
+        "gen_seconds": 11.758,
+        "text": "PROBLEM STATEMENT:\nA marketing operations manager reports that workbook exports beyond roughly 100,000 rows or 90 days of data crash the browser tab, so large reporting periods cannot be exported directly. Quarterly reporting now depends on manual slicing and conversion.\n\nUSER STORY:\nAs a marketing operations manager, I want a server-side export that completes reliably for large result sets, So that any report can be exported in full without browser crashes or manual stitching.\n\nACCEPTANCE CRITERIA:\nScenario: Large export crashes workbook\nGiven a report whose result set exceeds 100,000 rows\nWhen the user requests a spreadsheet export\nThen the export is generated server-side and delivered complete within a documented time bound\nAnd exports split across multiple sheets respect the workbook row limit"
+      }
+    },
+    {
+      "id": "rbac-017",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 147,
+        "output_chars": 748,
+        "gen_seconds": 5.014,
+        "text": "PROBLEM STATEMENT:\nAPI tokens are born with the creator's full permissions by default, causing potential security risks and making it difficult to manage permissions for hundreds of tokens in CI systems.\n\nUSER STORY:\nAs a compliance auditor, I want to be able to manage API tokens with role-based permissions, so that I can ensure the security and integrity of our financial services firm's systems.\n\nACCEPTANCE CRITERIA:\nGiven the API token creation system is set to default to role-based permissions\nWhen I create a new API token\nThen it should be assigned the role of the creator\nAnd the creator's role should be the highest level of permission\nAnd the system should prevent the creation of tokens with higher permissions than the creator's role"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 149,
+        "output_chars": 817,
+        "gen_seconds": 8.772,
+        "text": "PROBLEM STATEMENT:\nA compliance auditor at a financial services firm reports that newly created API tokens inherit the creator's full permissions by default with no scope selection. A single leaked token from a CI system exposes everything its owner can access, which fails security review.\n\nUSER STORY:\nAs a compliance auditor at a financial services firm, I want scoped API tokens where permissions are selected explicitly at creation, So that machine credentials carry only the permissions their integration requires.\n\nACCEPTANCE CRITERIA:\nScenario: API token defaults to owner permissions\nGiven a user creates a new API token\nWhen the creation flow is completed\nThen the token is issued with only the scopes explicitly selected during creation\nAnd existing tokens can have their scopes narrowed without reissuance"
+      }
+    },
+    {
+      "id": "rbac-041",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 136,
+        "output_chars": 684,
+        "gen_seconds": 4.644,
+        "text": "PROBLEM STATEMENT:\nThere is no control over guest-to-guest invitations in the access management module.\n\nUSER STORY:\nAs a franchise group operations director, I want to be able to block guest-to-guest invitations, so that I can maintain control over access to the system and prevent unauthorized access.\n\nACCEPTANCE CRITERIA:\nGiven the access management module is open to guest-to-guest invitations\nWhen I attempt to send a guest-to-guest invitation\nThen I should be presented with the option to block the invitation\nAnd when I block the invitation, the system should prevent the guest from receiving the invitation\nAnd the system should notify me that the invitation has been blocked"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 140,
+        "output_chars": 818,
+        "gen_seconds": 7.479,
+        "text": "PROBLEM STATEMENT:\nA operations director at a franchise group reports that guest collaborators can invite additional guests without approval, letting unsanctioned external parties access internal content. The violation of the external-access policy required a full workspace audit.\n\nUSER STORY:\nAs a operations director at a franchise group, I want guest invitations to require approval from a workspace administrator, So that external access is always explicitly sponsored by an authorized member.\n\nACCEPTANCE CRITERIA:\nScenario: Guest can invite additional guests\nGiven a guest collaborator attempts to invite a new guest\nWhen the invitation is submitted\nThen the invitation is held pending administrator approval instead of taking effect\nAnd administrators receive a notification with the pending invitation details"
+      }
+    },
+    {
+      "id": "ingest-046",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 158,
+        "output_chars": 718,
+        "gen_seconds": 5.661,
+        "text": "PROBLEM STATEMENT:\nThe webhooks subsystem does not provide Retry-After or X-RateLimit headers in rate limit responses, making it difficult to intelligently back off and avoid throttling.\n\nUSER STORY:\nAs a solutions architect, I want the webhooks subsystem to provide Retry-After and X-RateLimit headers in rate limit responses, so that I can intelligently back off and avoid throttling.\n\nACCEPTANCE CRITERIA:\nScenario: A rate limit response is received with a 429 status code\n  Given the rate limit response has a 429 status code\n  When the response is received\n  Then the response should contain a Retry-After header with a non-zero value\n  And the response should contain an X-RateLimit header with a non-empty value"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 779,
+        "gen_seconds": 8.185,
+        "text": "PROBLEM STATEMENT:\nA solutions architect at a technology partner reports that HTTP 429 responses omit rate-limit and retry-timing headers, leaving clients to guess backoff behavior. Synchronization jobs fail unpredictably and cause avoidable on-call pages.\n\nUSER STORY:\nAs a solutions architect at a technology partner, I want standard rate-limit headers including Retry-After on every 429 response, So that clients can honor rate limits deterministically instead of guessing.\n\nACCEPTANCE CRITERIA:\nScenario: Rate limit response omits retry-after header\nGiven a client exceeds its API rate limit\nWhen the API returns a 429 response\nThen the response includes Retry-After plus quota and reset headers\nAnd successful responses include remaining-quota headers for the current window"
+      }
+    },
+    {
+      "id": "ingest-030",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 231,
+        "output_chars": 1138,
+        "gen_seconds": 8.445,
+        "text": "PROBLEM STATEMENT:\nThe current webhook system is prone to instant retry storms when the endpoint is slow, resulting in dropped events and increased API costs due to polling fallback.\n\nUSER STORY:\nAs a solutions architect, I want to implement a retry mechanism with a Retry-After header to handle slow endpoint situations, so that events are not dropped and API costs are reduced.\n\nACCEPTANCE CRITERIA:\nScenario: The webhook system is configured to use a retry mechanism with a Retry-After header.\n  Given the webhook endpoint is slow\n  When a request is made to the endpoint\n  Then a Retry-After header is included in the response with a value indicating the time to wait before retrying\n  Scenario: The retry mechanism is triggered after the specified time\n  Given the webhook endpoint is still slow\n  When the retry mechanism is triggered\n  Then a new request is made to the endpoint with the Retry-After header\n  Scenario: The retry mechanism is exhausted\n  Given the webhook endpoint is still slow\n  When the retry mechanism is exhausted\n  Then an error is returned to the client indicating that the retry mechanism has been exhausted"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 779,
+        "gen_seconds": 7.886,
+        "text": "PROBLEM STATEMENT:\nA solutions architect at a technology partner reports that HTTP 429 responses omit rate-limit and retry-timing headers, leaving clients to guess backoff behavior. Synchronization jobs fail unpredictably and cause avoidable on-call pages.\n\nUSER STORY:\nAs a solutions architect at a technology partner, I want standard rate-limit headers including Retry-After on every 429 response, So that clients can honor rate limits deterministically instead of guessing.\n\nACCEPTANCE CRITERIA:\nScenario: Rate limit response omits retry-after header\nGiven a client exceeds its API rate limit\nWhen the API returns a 429 response\nThen the response includes Retry-After plus quota and reset headers\nAnd successful responses include remaining-quota headers for the current window"
+      }
+    },
+    {
+      "id": "rbac-007",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 141,
+        "output_chars": 684,
+        "gen_seconds": 5.299,
+        "text": "PROBLEM STATEMENT: \nOur team relies on our workspace roles system all day, but audit logs do not record data exports, leading to difficulties in tracking and investigating sensitive data.\n\nUSER STORY: \nAs a team lead, I want the workspace roles system to include audit logs for data exports, so that I can effectively track and investigate sensitive data leaks.\n\nACCEPTANCE CRITERIA: \nScenario: A user exports data from a workspace.\nGiven: The user has the necessary permissions to export data.\nWhen: The user initiates the data export process.\nThen: The system records the data export in the audit logs.\nAnd: The audit logs include a timestamp and a description of the data exported."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 159,
+        "output_chars": 803,
+        "gen_seconds": 8.004,
+        "text": "PROBLEM STATEMENT:\nA engineering team lead at a scale-up reports that data export actions are not recorded in the audit log, making it impossible to attribute exported files to a user. Compliance reviews cannot verify who exported records containing personal data.\n\nUSER STORY:\nAs a engineering team lead at a scale-up, I want every data export to be captured in the audit log with actor, scope, and timestamp, So that data movement out of the platform is attributable during compliance reviews.\n\nACCEPTANCE CRITERIA:\nScenario: Audit log omits data export events\nGiven a user with export permission exports a dataset\nWhen the export completes\nThen an audit event records the actor, dataset scope, row count, and timestamp\nAnd audit events for exports are retained for the same period as other audit data"
+      }
+    },
+    {
+      "id": "auth-007",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 134,
+        "output_chars": 664,
+        "gen_seconds": 4.56,
+        "text": "PROBLEM STATEMENT: \nRole changes made in Okta groups do not reflect in the identity provider dashboard until the next day, causing delays in permissions and lag in the mapping UI.\n\nUSER STORY: \nAs an IT operations lead, I want to see role changes in Okta groups reflected in the identity provider dashboard in real-time, so that I can manage our organization's identity and access more efficiently.\n\nACCEPTANCE CRITERIA: \nGiven the IT operations lead logs into the identity provider dashboard\nWhen they make changes to an Okta group\nThen the changes are reflected in the dashboard immediately\nAnd the mapping UI shows the updated group and permissions in real-time"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 169,
+        "output_chars": 884,
+        "gen_seconds": 8.863,
+        "text": "PROBLEM STATEMENT:\nA IT operations lead at a mid-size fintech reports that role changes made in identity-provider groups do not propagate to application roles until a delayed sync completes. Users operate with stale permissions, which forces risky temporary-access workarounds.\n\nUSER STORY:\nAs a IT operations lead at a mid-size fintech, I want event-driven synchronization of identity-provider group changes to application roles, So that permission changes take effect within minutes instead of after a nightly batch.\n\nACCEPTANCE CRITERIA:\nScenario: Role mapping does not reflect IdP group changes\nGiven a user's group membership changes in the identity provider\nWhen the change event is received by the application\nThen the user's application roles are updated to match the new group mapping within 5 minutes\nAnd both the old and new role assignments are captured in the audit trail"
+      }
+    },
+    {
+      "id": "rbac-030",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 164,
+        "output_chars": 843,
+        "gen_seconds": 5.565,
+        "text": "PROBLEM STATEMENT:\nOur team relies on the permissions console all day — I'm the security engineer on the platform team. Basically, old team memberships linger and expose data nobody meant to share. The team roster shows them removed. HR flagged cross-org data visibility after a departure. This needs to be prioritized honestly.\n\nUSER STORY:\nAs a security engineer, I want to ensure that old team memberships are removed from the permissions console after a departure, so that I can maintain accurate and secure data visibility.\n\nACCEPTANCE CRITERIA:\nGiven the user has initiated the removal process for a team member\nWhen the user selects the \"Remove Membership\" option\nThen the team member's membership is removed from the permissions console\nAnd the team roster is updated to reflect the removal\nAnd any cross-org data visibility is cleared"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 153,
+        "output_chars": 838,
+        "gen_seconds": 8.202,
+        "text": "PROBLEM STATEMENT:\nA security engineer on the platform team reports that users retain access to team resources after being removed from the team, because membership-derived grants are not revoked on removal. Former members keep visibility into sensitive workspaces.\n\nUSER STORY:\nAs a security engineer on the platform team, I want team membership changes to revoke all membership-derived access immediately, So that departing or transferring members lose access to team resources at the moment of removal.\n\nACCEPTANCE CRITERIA:\nScenario: Stale team membership exposes dashboards\nGiven a user is removed from a team\nWhen the removal is processed\nThen all access derived from that membership is revoked immediately\nAnd explicitly assigned permissions that predate the membership remain intact\nAnd the revocation is recorded in the audit log"
+      }
+    },
+    {
+      "id": "auth-041",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 186,
+        "output_chars": 848,
+        "gen_seconds": 6.212,
+        "text": "PROBLEM STATEMENT:\nThe 'forgot password' flow in the Okta integration sends expired links, resulting in 8% of reset requests being bounced back, causing locked-out users to sit idle and call the helpdesk.\n\nUSER STORY:\nAs a user who has forgotten their password, I want to receive a valid password reset link within a reasonable time frame, so that I can reset my password and regain access to my account.\n\nACCEPTANCE CRITERIA:\nGiven the 'forgot password' flow is initiated\nWhen the user receives a password reset link\nThen the link should be valid and not expire within a reasonable time frame (e.g. 1 hour)\nAnd the link should be delivered to the user's email address within 30 minutes\nAnd the user should be able to successfully reset their password using the link\nAnd the user should be notified of any issues with the link (e.g. \"link expired\")"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 162,
+        "output_chars": 843,
+        "gen_seconds": 8.676,
+        "text": "PROBLEM STATEMENT:\nA engineering manager at a startup scaling past 200 employees reports that password-reset links expire before the email is delivered, so the delivered link is already invalid. Locked-out users idle until they escalate to the helpdesk.\n\nUSER STORY:\nAs a engineering manager at a startup scaling past 200 employees, I want prompt password-reset links that survive email delivery, So that users can self-service password recovery without waiting on the helpdesk.\n\nACCEPTANCE CRITERIA:\nScenario: Password reset link expires before delivery\nGiven a user requests a password reset\nWhen the reset email is dispatched\nThen the link remains valid for at least 30 minutes and remains redeemable after the recipient receives the email\nAnd the same link can be reused by the same user for an extended period after the initial redemption"
+      }
+    },
+    {
+      "id": "ingest-021",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 205,
+        "output_chars": 1041,
+        "gen_seconds": 7.343,
+        "text": "PROBLEM STATEMENT: \nThe partner-facing event stream is not properly ordered, causing downstream state machines to become confused.\n\nUSER STORY: \nAs a platform site reliability engineer, I want the partner-facing event stream to be properly ordered, so that downstream state machines can function correctly.\n\nACCEPTANCE CRITERIA: \nScenario: The event stream is populated with events.\nGiven: The events are not properly ordered.\nWhen: The reordering buffer is enabled.\nThen: The events are reordered and the downstream state machines function correctly.\n\nACCEPTANCE CRITERIA: \nScenario: The event stream is populated with events.\nGiven: The reordering buffer is disabled.\nWhen: The reordering buffer is enabled.\nThen: The events are reordered and the downstream state machines function correctly.\n\nACCEPTANCE CRITERIA: \nScenario: The event stream is populated with events.\nGiven: The reordering buffer is enabled.\nWhen: The reordering buffer is disabled.\nThen: The events are not reordered and the downstream state machines function correctly."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 156,
+        "output_chars": 860,
+        "gen_seconds": 8.397,
+        "text": "PROBLEM STATEMENT:\nA platform site reliability engineer reports that events are delivered out of source order, so update events sometimes precede their creation events. Downstream mirrors compute incorrect state and consumers add buffering latency to compensate.\n\nUSER STORY:\nAs a platform site reliability engineer, I want delivery that preserves source event ordering per entity, or explicit sequencing metadata that enables correct reordering, So that consumers can reconstruct source-accurate entity state without full re-syncs.\n\nACCEPTANCE CRITERIA:\nScenario: Out-of-order event delivery\nGiven a source emits sequential events for the same entity\nWhen the events are delivered to a consumer\nThen per-entity ordering is preserved, or each event carries sequence metadata enabling reordering\nAnd sequence gaps are surfaced to the consumer as detectable gaps"
+      }
+    },
+    {
+      "id": "ingest-032",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 127,
+        "output_chars": 639,
+        "gen_seconds": 5.014,
+        "text": "PROBLEM STATEMENT:\nThe public API's REST layer fails to handle bad records, resulting in a success response and incomplete error handling.\n\nUSER STORY:\nAs a third-party developer, I want the public API to return a clear error response when it fails to handle bad records, so that I can diagnose and resolve issues more efficiently.\n\nACCEPTANCE CRITERIA:\nGiven the public API's REST layer is handling a bad record\nWhen the API returns a success response\nThen the API should return a clear error response indicating the failure to handle the bad record\nAnd the error response should include a log entry indicating the location of the failure"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 171,
+        "output_chars": 964,
+        "gen_seconds": 8.743,
+        "text": "PROBLEM STATEMENT:\nA third-party developer building against the public API reports that a successful response includes records that have already been deleted, because the service returns a partial page even when the entire page has failed validation. Downstream mirrors compute incorrect totals and consumers add buffering latency to compensate.\n\nUSER STORY:\nAs a third-party developer building against the public API, I want a response where partially invalid pages are reported completely, with no partial inclusion of deleted or invalid records, So that consumers can reconstruct valid pages without manual stitching.\n\nACCEPTANCE CRITERIA:\nScenario: Partially invalid page returns partial results\nGiven a page of records returns more invalid than present rows\nWhen the page is retrieved\nThen every present row is included in the response and every absent row is reported as deleted\nAnd partially invalid pages are reported with a clear list of what was rejected"
+      }
+    },
+    {
+      "id": "billing-036",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 119,
+        "output_chars": 641,
+        "gen_seconds": 4.726,
+        "text": "PROBLEM STATEMENT: \nOur accounting sync silently drops credit notes, resulting in manual adjustments being made every month.\n\nUSER STORY: \nAs a accounts payable coordinator, I want the accounting sync to properly handle credit notes, so that I can accurately record and reconcile transactions without manual adjustments.\n\nACCEPTANCE CRITERIA: \nScenario: A credit note is generated and synced with the accounting system.\nGiven: The accounting sync is configured to handle credit notes.\nWhen: The credit note is synced with the accounting system.\nThen: The accounting system records the credit note and updates the account balance accordingly."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 155,
+        "output_chars": 876,
+        "gen_seconds": 7.697,
+        "text": "PROBLEM STATEMENT:\nA accounts payable coordinator at a manufacturing distributor reports that credit notes are not synchronized to the accounting system even though invoices sync correctly. The books diverge from the billing platform and month-end close requires manual journal entries.\n\nUSER STORY:\nAs a accounts payable coordinator at a manufacturing distributor, I want credit notes to sync to the accounting system with the same reliability as invoices, So that the accounting ledger always reflects refunds and credits without manual entry.\n\nACCEPTANCE CRITERIA:\nScenario: Credit note fails to sync to accounting\nGiven a credit note is issued against a previously synced invoice\nWhen the accounting synchronization runs\nThen the credit note is created in the accounting system and linked to the original invoice\nAnd a sync failure raises an alert and retries with backoff"
+      }
+    },
+    {
+      "id": "rbac-012",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 153,
+        "output_chars": 729,
+        "gen_seconds": 5.785,
+        "text": "PROBLEM STATEMENT:\nThe access management module is not providing users with the ability to view 403 error pages, resulting in users sharing screenshots of records instead of links.\n\nUSER STORY:\nAs a law firm IT administrator, I want users with edit permission to be able to view 403 error pages, so that they can access and share links to records instead of screenshots.\n\nACCEPTANCE CRITERIA:\nScenario: A user with edit permission is presented with a 403 error page.\nGiven: The user is logged in with edit permission.\nWhen: The user requests access to a restricted resource.\nThen: The system displays the 403 error page with a link to access the resource.\nAnd: The system allows the user to click the link to access the resource."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 176,
+        "output_chars": 937,
+        "gen_seconds": 8.601,
+        "text": "PROBLEM STATEMENT:\nA IT administrator at a law firm reports that a custom role can be granted edit permission on a resource without view permission, making the role unusable and driving administrators to grant broader access than intended. Audits flag the resulting over-privileged roles.\n\nUSER STORY:\nAs a IT administrator at a law firm, I want permission scopes where edit implies view, with validation preventing broken combinations, So that custom roles remain usable without granting administrator-level access.\n\nACCEPTANCE CRITERIA:\nScenario: Custom role allows edit without view\nGiven an administrator creates a custom role with edit scope on a resource\nWhen the role definition is saved\nThen view scope is granted automatically and holders can both open and modify the resource\nAnd an explicit deny on view blocks edit as well, with a warning at save time\nAnd the effective permission matrix is previewable before saving the role"
+      }
+    },
+    {
+      "id": "auth-006",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 113,
+        "output_chars": 506,
+        "gen_seconds": 4.068,
+        "text": "PROBLEM STATEMENT:\nSAML logins fail with 'Assertion not yet valid' for a chunk of users after the DST switch.\n\nUSER STORY:\nAs the workspace tenancy administrator at a B2B SaaS company, I want to troubleshoot and resolve SAML login issues, so that I can ensure seamless access for all users.\n\nACCEPTANCE CRITERIA:\nGiven the SAML login fails with 'Assertion not yet valid' error\nWhen the error occurs after the DST switch\nThen the administrator should investigate logs to identify the root cause of the issue"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 182,
+        "output_chars": 959,
+        "gen_seconds": 9.341,
+        "text": "PROBLEM STATEMENT:\nA workspace tenancy administrator at a B2B SaaS company reports that SAML assertions are rejected with 'not yet valid' errors whenever identity-provider and service-provider clocks drift by a few minutes. The rejections intermittently lock users out of the application.\n\nUSER STORY:\nAs a workspace tenancy administrator at a B2B SaaS company, I want a configurable clock-skew tolerance applied when validating SAML assertions, So that minor clock drift between the identity provider and the service provider does not block authentication.\n\nACCEPTANCE CRITERIA:\nScenario: SAML assertion rejected due to clock skew\nGiven the identity provider clock differs from the service provider clock by less than the configured skew tolerance\nWhen the service provider validates an incoming SAML assertion\nThen the assertion is accepted and the user completes single sign-on\nAnd the effective skew at validation time is written to the authentication log"
+      }
+    },
+    {
+      "id": "rbac-011",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 130,
+        "output_chars": 659,
+        "gen_seconds": 4.995,
+        "text": "PROBLEM STATEMENT:\nExternal guest added two more external guests to our board, violating our security policy, and an unsanctioned external party viewed internal content.\n\nUSER STORY:\nAs a security team, I want to detect and prevent unsanctioned external access to internal content, so that I can take swift action to protect our organization's sensitive information.\n\nACCEPTANCE CRITERIA:\nGiven the access management module is open to external guests\nWhen an external guest adds a new guest to the board\nThen the system should alert the security team to the new guest and the potential security risk\nAnd the system should log the incident for future reference"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 142,
+        "output_chars": 808,
+        "gen_seconds": 6.921,
+        "text": "PROBLEM STATEMENT:\nA engineering team lead at a scale-up reports that guest collaborators can invite additional guests without approval, letting unsanctioned external parties access internal content. The violation of the external-access policy required a full workspace audit.\n\nUSER STORY:\nAs a engineering team lead at a scale-up, I want guest invitations to require approval from a workspace administrator, So that external access is always explicitly sponsored by an authorized member.\n\nACCEPTANCE CRITERIA:\nScenario: Guest can invite additional guests\nGiven a guest collaborator attempts to invite a new guest\nWhen the invitation is submitted\nThen the invitation is held pending administrator approval instead of taking effect\nAnd administrators receive a notification with the pending invitation details"
+      }
+    },
+    {
+      "id": "auth-018",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 127,
+        "output_chars": 594,
+        "gen_seconds": 4.417,
+        "text": "PROBLEM STATEMENT:\nSAML logins fail with 'Assertion not yet valid' for a significant number of users, resulting in wasted time for support staff.\n\nUSER STORY:\nAs a corporate IT operations lead, I want to resolve the SAML login issues for all users, so that I can ensure seamless access to our systems without requiring workaround logins.\n\nACCEPTANCE CRITERIA:\nGiven the SAML login system is configured to handle DST time changes\nWhen the system is restarted after the DST switch\nThen the SAML login should be successful for all users, and the 'Assertion not yet valid' error should be resolved."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 176,
+        "output_chars": 933,
+        "gen_seconds": 9.28,
+        "text": "PROBLEM STATEMENT:\nA IT operations lead at a mid-size fintech reports that SAML assertions are rejected with 'not yet valid' errors whenever identity-provider and service-provider clocks drift by a few minutes. The rejections intermittently lock users out of the application.\n\nUSER STORY:\nAs a IT operations lead at a mid-size fintech, I want a configurable clock-skew tolerance applied when validating SAML assertions, So that minor clock drift between the identity provider and the service provider does not block authentication.\n\nACCEPTANCE CRITERIA:\nScenario: SAML assertion rejected due to clock skew\nGiven the identity provider clock differs from the service provider clock by less than the configured skew tolerance\nWhen the service provider validates an incoming SAML assertion\nThen the assertion is accepted and the user completes single sign-on\nAnd the effective skew at validation time is written to the authentication log"
+      }
+    },
+    {
+      "id": "reports-005",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 142,
+        "output_chars": 723,
+        "gen_seconds": 4.805,
+        "text": "PROBLEM STATEMENT:\nThe exported PDF from the insights platform does not include visualizations and truncates tables, resulting in an incomplete report.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want the exported PDF to include all visualizations and tables, so that I can receive a complete and accurate report when the insights platform misbehaves.\n\nACCEPTANCE CRITERIA:\nScenario: The exported PDF contains all visualizations and tables from the original report.\nGiven: The original report includes charts, tables, and other visualizations.\nWhen: The exported PDF is generated from the original report.\nThen: The exported PDF includes all charts, tables, and other visualizations from the original report."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 170,
+        "output_chars": 931,
+        "gen_seconds": 9.069,
+        "text": "PROBLEM STATEMENT:\nA reporting coordinator in a PMO office reports that PDF exports truncate wide tables at the page boundary and omit chart visualizations entirely. Board materials must be assembled manually from screenshots, and one committee received silently truncated financial tables.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want PDF exports that paginate wide tables and render all charts, So that exported PDFs are complete, presentation-ready versions of the on-screen report.\n\nACCEPTANCE CRITERIA:\nScenario: PDF export truncates wide tables\nGiven a report containing tables wider than one printed page and embedded charts\nWhen the report is exported to PDF\nThen wide tables paginate across pages with repeated headers and every chart renders as an image\nAnd landscape orientation is applied automatically when tables exceed portrait width\nAnd the exported PDF includes page numbers and the report title"
+      }
+    },
+    {
+      "id": "ingest-042",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 173,
+        "output_chars": 808,
+        "gen_seconds": 5.827,
+        "text": "PROBLEM STATEMENT:\nThe backend engineer on the integrations team is paged when the bulk import endpoint misbehaves, resulting in duplicates in the app due to at-least-once delivery.\n\nUSER STORY:\nAs a backend engineer on the integrations team, I want the Idempotency-Key header to be honored and duplicates to be avoided, so that I can resolve issues with the bulk import endpoint without unnecessary paged notifications.\n\nACCEPTANCE CRITERIA:\nScenario: The bulk import endpoint receives an Idempotency-Key header with a unique value.\nGiven: The Idempotency-Key header is set to a unique value in the request.\nWhen: The bulk import endpoint processes the request.\nThen: The response does not contain the Idempotency-Key header or any duplicate records.\nAnd: The system does not generate any duplicate records."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 173,
+        "output_chars": 871,
+        "gen_seconds": 9.085,
+        "text": "PROBLEM STATEMENT:\nA backend engineer on the integrations team reports that the ingestion API accepts idempotency-key headers but does not honor them, so retried requests create duplicate records. The same request returns a different result each time a client retries.\n\nUSER STORY:\nAs a backend engineer on the integrations team, I want server-side enforcement of idempotency keys, where identical requests with the same key produce exactly one result, So that retried or duplicated client requests never produce duplicate records.\n\nACCEPTANCE CRITERIA:\nScenario: Idempotency key not honored\nGiven a client sends a request carrying an idempotency key that was already processed\nWhen the request is submitted again\nThen the API returns the same result as before and no duplicate record is created\nAnd the same key is invalidated after the response for a predictable window"
+      }
+    },
+    {
+      "id": "billing-006",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 141,
+        "output_chars": 734,
+        "gen_seconds": 4.744,
+        "text": "PROBLEM STATEMENT: \nThe credit for unused days does not accurately reflect the math on upgrade in the customer billing workspace.\n\nUSER STORY: \nAs a procurement analyst at a university system, I want the credit for unused days to accurately reflect the math on upgrade in the customer billing workspace, so that I can provide accurate information to stakeholders and avoid workarounds.\n\nACCEPTANCE CRITERIA:\nScenario: The system displays the correct credit for unused days when a customer upgrades.\nGiven: The customer has an active subscription with unused days.\nWhen: The customer upgrades their subscription.\nThen: The system displays the correct credit for unused days.\nAnd: The credit for unused days matches the math on upgrade."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 177,
+        "output_chars": 944,
+        "gen_seconds": 9.429,
+        "text": "PROBLEM STATEMENT:\nA procurement analyst at a university system reports that proration credits on mid-cycle plan changes are calculated incorrectly, producing amounts that do not match the expected unused-time refund. Customers dispute the resulting charges and finance issues manual corrections weekly.\n\nUSER STORY:\nAs a procurement analyst at a university system, I want accurate, transparent proration calculations for mid-cycle plan changes, So that customers are charged and credited correctly when plans change mid-cycle.\n\nACCEPTANCE CRITERIA:\nScenario: Proration credit miscalculated on plan change\nGiven a customer on a monthly plan changes to a different plan mid-cycle\nWhen the prorated charges and credits for the remainder of the cycle are computed\nThen the credit equals the unused portion of the old plan and the charge equals the remaining days of the new plan\nAnd the invoice includes an itemized breakdown of the proration math"
+      }
+    },
+    {
+      "id": "rbac-001",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 96,
+        "output_chars": 504,
+        "gen_seconds": 3.435,
+        "text": "PROBLEM STATEMENT:\nGuest collaborators can invite more guests without any approval.\n\nUSER STORY:\nAs a guest collaborator, I want to be able to invite additional guests without requiring approval, so that I can efficiently manage and collaborate with others.\n\nACCEPTANCE CRITERIA:\nGiven the guest collaborator has a valid account\nWhen they attempt to invite a guest\nThen the guest is added to the collaboration without requiring approval\nAnd the guest collaborator is notified of the successful invitation"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 140,
+        "output_chars": 818,
+        "gen_seconds": 7.504,
+        "text": "PROBLEM STATEMENT:\nA operations director at a franchise group reports that guest collaborators can invite additional guests without approval, letting unsanctioned external parties access internal content. The violation of the external-access policy required a full workspace audit.\n\nUSER STORY:\nAs a operations director at a franchise group, I want guest invitations to require approval from a workspace administrator, So that external access is always explicitly sponsored by an authorized member.\n\nACCEPTANCE CRITERIA:\nScenario: Guest can invite additional guests\nGiven a guest collaborator attempts to invite a new guest\nWhen the invitation is submitted\nThen the invitation is held pending administrator approval instead of taking effect\nAnd administrators receive a notification with the pending invitation details"
+      }
+    },
+    {
+      "id": "billing-037",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 148,
+        "output_chars": 675,
+        "gen_seconds": 5.113,
+        "text": "PROBLEM STATEMENT: \nPenny discrepancies on non-USD invoices cause customers to withhold payment due to mismatched totals.\n\nUSER STORY: \nAs a customer billing coordinator, I want to automatically reconcile and round non-USD invoices to the nearest cent, so that I can ensure accurate payment totals and avoid customer withholding.\n\nACCEPTANCE CRITERIA: \nScenario: A non-USD invoice with a total of 123.45 is submitted for payment.\nGiven: The system is set to round non-USD invoices to the nearest cent.\nWhen: The system processes the invoice and applies the rounding.\nThen: The total of the invoice is rounded to 123.50.\nAnd: The system displays the rounded total to the user."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 163,
+        "output_chars": 919,
+        "gen_seconds": 8.849,
+        "text": "PROBLEM STATEMENT:\nA accounts payable coordinator at a manufacturing distributor reports that multi-currency invoice totals differ by small amounts from bank-confirmed charges due to inconsistent rounding rules. Automated reconciliation breaks and customers dispute mismatched totals.\n\nUSER STORY:\nAs a accounts payable coordinator at a manufacturing distributor, I want consistent banker's-rounding on currency conversion applied line-by-line and at the invoice total, So that invoice totals in any currency match the amounts actually captured from the payment provider.\n\nACCEPTANCE CRITERIA:\nScenario: Multi-currency rounding mismatch\nGiven an invoice is issued in a currency different from the account's base currency\nWhen line items and the invoice total are converted and rounded\nThen the rounded line items sum exactly to the rounded invoice total\nAnd the same rounding rule is applied to refunds and credit notes"
+      }
+    },
+    {
+      "id": "billing-024",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 108,
+        "output_chars": 478,
+        "gen_seconds": 3.73,
+        "text": "PROBLEM STATEMENT: \nExporting invoices to CSV fails with a 504 error when more than 5,000 invoices are exported.\n\nUSER STORY: \nAs a finance operations manager at a design agency, I want to be able to export invoices to CSV without errors, so that I can reconcile and tie out invoices accurately.\n\nACCEPTANCE CRITERIA: \nGiven the system is configured to handle large CSV exports\nWhen I request to export more than 5,000 invoices\nThen the export should succeed without a 504 error"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 163,
+        "output_chars": 848,
+        "gen_seconds": 8.819,
+        "text": "PROBLEM STATEMENT:\nA finance operations manager at a design agency reports that CSV exports of more than roughly 5,000 invoices fail with a gateway timeout, so large billing periods cannot be exported at all. Month-end close now depends on stitching partial manual exports.\n\nUSER STORY:\nAs a finance operations manager at a design agency, I want a reliable bulk invoice export that completes for arbitrary date ranges, So that month-end close can be completed from a single export without manual stitching.\n\nACCEPTANCE CRITERIA:\nScenario: Large invoice export times out\nGiven the billing account contains more than 5,000 invoices in the selected date range\nWhen the user requests a CSV export of that range\nThen the export job completes successfully and the download contains every matching invoice\nAnd export progress is visible while the job runs"
+      }
+    },
+    {
+      "id": "billing-041",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 142,
+        "output_chars": 740,
+        "gen_seconds": 5.41,
+        "text": "PROBLEM STATEMENT: \nThe accounts payable coordinator at a manufacturing distributor experiences frequent timeouts when exporting large CSV files from the accounts receivable module, resulting in a two-day manual exercise for month-end close.\n\nUSER STORY: \nAs a accounts payable coordinator, I want to be able to export large CSV files from the accounts receivable module without timeouts, So that I can complete month-end close efficiently.\n\nACCEPTANCE CRITERIA: \nScenario: Exporting a large CSV file from the accounts receivable module\n  Given the accounts receivable module is populated with a large dataset\n  When I attempt to export the dataset as a CSV file\n  Then the export should complete successfully within a reasonable time frame"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 163,
+        "output_chars": 876,
+        "gen_seconds": 9.08,
+        "text": "PROBLEM STATEMENT:\nA accounts payable coordinator at a manufacturing distributor reports that CSV exports of more than roughly 5,000 invoices fail with a gateway timeout, so large billing periods cannot be exported at all. Month-end close now depends on stitching partial manual exports.\n\nUSER STORY:\nAs a accounts payable coordinator at a manufacturing distributor, I want a reliable bulk invoice export that completes for arbitrary date ranges, So that month-end close can be completed from a single export without manual stitching.\n\nACCEPTANCE CRITERIA:\nScenario: Large invoice export times out\nGiven the billing account contains more than 5,000 invoices in the selected date range\nWhen the user requests a CSV export of that range\nThen the export job completes successfully and the download contains every matching invoice\nAnd export progress is visible while the job runs"
+      }
+    },
+    {
+      "id": "reports-034",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 115,
+        "output_chars": 595,
+        "gen_seconds": 4.291,
+        "text": "PROBLEM STATEMENT:\nThe Monday morning report shows an empty table every single week, which is a recurring issue since the report timezone was changed.\n\nUSER STORY:\nAs a marketing operations manager, I want the Monday morning report to display data in the correct timezone, so that I can effectively analyze and make informed decisions about our marketing campaigns.\n\nACCEPTANCE CRITERIA:\nGiven the report timezone is set to the correct value\nWhen I generate the Monday morning report\nThen the report table should display data for the correct week, and the data should be in the correct timezone."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 854,
+        "gen_seconds": 7.804,
+        "text": "PROBLEM STATEMENT:\nA marketing operations manager reports that scheduled report emails arrive with empty result sets even though the same report returns data when run manually. Leadership has stopped trusting the automated numbers and the team re-sends results by hand.\n\nUSER STORY:\nAs a marketing operations manager, I want scheduled reports that execute against the same query context as interactive runs, So that automated email reports always contain the data visible in the dashboard.\n\nACCEPTANCE CRITERIA:\nScenario: Scheduled report sends empty result set\nGiven a saved report returns rows when executed interactively\nWhen the scheduled execution runs and emails the report\nThen the emailed report contains the same rows as the interactive execution\nAnd a scheduled run returning zero rows when the dashboard shows data triggers an operations alert"
+      }
+    },
+    {
+      "id": "auth-009",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 205,
+        "output_chars": 954,
+        "gen_seconds": 7.649,
+        "text": "PROBLEM STATEMENT:\nThe IT operations lead at a mid-size fintech experiences intermittent SAML rejections due to clock differences between the IdP and SP, resulting in on-call paged for resolving the issue.\n\nUSER STORY:\nAs the IT operations lead, I want to resolve SAML rejections caused by clock differences between the IdP and SP, so that I can minimize the number of on-call paged for resolving these issues.\n\nACCEPTANCE CRITERIA:\nScenario: The SAML rejection occurs due to clock differences between the IdP and SP.\n  Given the IdP and SP have different clocks\n  When the SAML assertion is sent to the SP\n  Then the SAML rejection occurs due to clock differences\n\nScenario: The IT operations lead resolves the SAML rejection.\n  Given the IT operations lead is notified of the SAML rejection\n  When the IT operations lead investigates the clock differences\n  Then the IT operations lead resolves the SAML rejection by synchronizing the IdP and SP clocks"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 176,
+        "output_chars": 933,
+        "gen_seconds": 9.002,
+        "text": "PROBLEM STATEMENT:\nA IT operations lead at a mid-size fintech reports that SAML assertions are rejected with 'not yet valid' errors whenever identity-provider and service-provider clocks drift by a few minutes. The rejections intermittently lock users out of the application.\n\nUSER STORY:\nAs a IT operations lead at a mid-size fintech, I want a configurable clock-skew tolerance applied when validating SAML assertions, So that minor clock drift between the identity provider and the service provider does not block authentication.\n\nACCEPTANCE CRITERIA:\nScenario: SAML assertion rejected due to clock skew\nGiven the identity provider clock differs from the service provider clock by less than the configured skew tolerance\nWhen the service provider validates an incoming SAML assertion\nThen the assertion is accepted and the user completes single sign-on\nAnd the effective skew at validation time is written to the authentication log"
+      }
+    },
+    {
+      "id": "rbac-047",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 162,
+        "output_chars": 839,
+        "gen_seconds": 5.771,
+        "text": "PROBLEM STATEMENT: \nThe current access management module does not support bulk-assignment of roles, resulting in a manual flow for each account assignment, taking approximately two minutes per assignment including confirmations.\n\nUSER STORY: \nAs a law firm IT administrator, I want to be able to bulk-assign roles to users, so that I can efficiently manage access and reduce the time spent on manual account assignments.\n\nACCEPTANCE CRITERIA: \nScenario: The IT administrator has a list of users to assign roles to.\nGiven: The access management module is configured to allow bulk-assignment of roles.\nWhen: The IT administrator selects the users and roles to assign.\nThen: The system automatically assigns the selected roles to the users.\nAnd: The system displays a confirmation message indicating the number of roles assigned successfully."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 165,
+        "output_chars": 849,
+        "gen_seconds": 8.306,
+        "text": "PROBLEM STATEMENT:\nA IT administrator at a law firm reports that role assignment supports no bulk operation, so onboarding dozens of staff requires repetitive per-account flows. Seasonal onboarding weeks become manual fire drills and idle first days.\n\nUSER STORY:\nAs a IT administrator at a law firm, I want bulk role assignment via CSV upload or multi-select in the admin console, So that large groups of users receive correct roles in a single audited operation.\n\nACCEPTANCE CRITERIA:\nScenario: Bulk role assignment unavailable\nGiven an administrator has a list of users to assign to a role\nWhen the bulk assignment is submitted\nThen every listed user receives the role and a summary reports successes and skipped rows\nAnd the operation creates one audit entry per affected user\nAnd invalid rows are reported with reasons without aborting the rest"
+      }
+    },
+    {
+      "id": "ingest-014",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 148,
+        "output_chars": 715,
+        "gen_seconds": 5.094,
+        "text": "PROBLEM STATEMENT:\nThe webhooks subsystem fails to handle large batch POST requests, resulting in data loss and requiring workarounds.\n\nUSER STORY:\nAs a backend engineer on the integrations team, I want to implement a solution to handle large batch POST requests without splitting them into smaller chunks, so that the team can rely on the webhooks subsystem without the need for workarounds.\n\nACCEPTANCE CRITERIA:\nScenario: A large batch POST request is sent to the webhooks subsystem.\nGiven: The request size exceeds the 5MB payload-size ceiling.\nWhen: The request is not split into smaller chunks.\nThen: The request is successfully processed and stored in the database.\nAnd: The request is not lost or truncated."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 162,
+        "output_chars": 834,
+        "gen_seconds": 8.74,
+        "text": "PROBLEM STATEMENT:\nA backend engineer on the integrations team reports that bulk upload requests larger than roughly 10MB are rejected by the gateway with a 502 before reaching the ingestion service. Nightly integration jobs fragment into manual shards and deliver customer data late.\n\nUSER STORY:\nAs a backend engineer on the integrations team, I want bulk upload support for large payloads via chunked or resumable ingestion, So that nightly batch imports of any practical size complete without sharding workarounds.\n\nACCEPTANCE CRITERIA:\nScenario: Bulk upload fails for large payloads\nGiven a client prepares a bulk import larger than 10MB\nWhen the import is submitted\nThen the upload is accepted, processed completely, and reports per-record acceptance results\nAnd an interrupted upload can resume from the last acknowledged chunk"
+      }
+    },
+    {
+      "id": "billing-008",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 140,
+        "output_chars": 765,
+        "gen_seconds": 4.711,
+        "text": "PROBLEM STATEMENT:\nThe automated invoice reconciliation fails due to discrepancies between the calculated invoice total in EUR and the actual amount received from the bank, resulting in manual reconciliation.\n\nUSER STORY:\nAs a finance lead, I want the system to accurately calculate the invoice total in EUR, taking into account the bank's rounding rules, so that automated reconciliation can succeed and reduce the need for manual intervention.\n\nACCEPTANCE CRITERIA:\nScenario: The system is configured to use the bank's rounding rules for EUR calculations.\nGiven the invoice total is calculated using the bank's rounding rules.\nWhen the system is run with the same rounding rules.\nThen the calculated invoice total matches the actual amount received from the bank."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 169,
+        "output_chars": 869,
+        "gen_seconds": 9.001,
+        "text": "PROBLEM STATEMENT:\nA finance lead at a B2B SaaS startup reports that multi-currency invoice totals differ by small amounts from bank-confirmed charges due to inconsistent rounding rules. Automated reconciliation breaks and customers dispute mismatched totals.\n\nUSER STORY:\nAs a finance lead at a B2B SaaS startup, I want consistent banker's-rounding on currency conversion applied line-by-line and at the invoice total, So that invoice totals in any currency match the amounts actually captured from the payment provider.\n\nACCEPTANCE CRITERIA:\nScenario: Multi-currency rounding mismatch\nGiven an invoice is issued in a currency different from the account's base currency\nWhen line items and the invoice total are converted and rounded\nThen the rounded line items sum exactly to the rounded invoice total\nAnd the same rounding rule is applied to refunds and credit notes"
+      }
+    },
+    {
+      "id": "auth-016",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 143,
+        "output_chars": 709,
+        "gen_seconds": 4.847,
+        "text": "PROBLEM STATEMENT:\nThe single sign-on gateway has silently broken, causing customer-facing teams to lose hours resolving 'is it down' questions.\n\nUSER STORY:\nAs a helpdesk technician at a regional healthcare group, I want the single sign-on gateway to be functioning correctly and providing accurate login success dashboards, so that I can efficiently resolve user issues and minimize downtime.\n\nACCEPTANCE CRITERIA:\nScenario: The single sign-on gateway is functioning correctly.\n  Given: The single sign-on gateway is launched.\n  When: A user attempts to log in.\n  Then: The login success dashboard is accurate and reflects the user's login status.\n  And: The login success dashboard is updated in real-time."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 158,
+        "output_chars": 914,
+        "gen_seconds": 8.504,
+        "text": "PROBLEM STATEMENT:\nA helpdesk technician at a regional healthcare group reports that identity-provider certificate rotations silently invalidate the service provider's stored SAML metadata, breaking SSO without any warning. Users experience an outage before administrators can react.\n\nUSER STORY:\nAs a helpdesk technician at a regional healthcare group, I want automatic metadata refresh plus proactive alerts when SAML metadata or certificates change, So that certificate rotations on the identity provider do not cause unplanned login outages.\n\nACCEPTANCE CRITERIA:\nScenario: Certificate rotation breaks SAML metadata\nGiven the service provider has cached identity-provider metadata\nWhen the identity provider rotates its signing certificate\nThen the application refreshes the metadata automatically and SSO continues without interruption\nAnd administrators receive an alert if refresh fails for more than 1 hour"
+      }
+    },
+    {
+      "id": "auth-008",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 239,
+        "output_chars": 1249,
+        "gen_seconds": 8.678,
+        "text": "PROBLEM STATEMENT: Terminated accounts retain their session and permissions for an extended period, causing security concerns.\n\nUSER STORY: As a DevOps engineer, I want to implement a mechanism to automatically expire terminated user sessions and permissions, so that I can ensure the security and integrity of our internal tools.\n\nACCEPTANCE CRITERIA:\n \nScenario: A user is terminated from the system.\nGiven: The user's account is marked as terminated.\nWhen: The system is configured to expire terminated user sessions after a specified period.\nThen: The user's session and permissions are automatically expired after the specified period.\n\nScenario: A user's account is terminated, but the system is not configured to expire their session.\nGiven: The user's account is marked as terminated.\nWhen: The system is not configured to expire terminated user sessions.\nThen: The user's session remains active.\n\nScenario: The system is configured to expire terminated user sessions after a specified period.\nGiven: The user's account is marked as terminated.\nAnd: The system is configured to expire terminated user sessions after a specified period.\nWhen: The system is run.\nThen: The user's session and permissions are expired after the specified period."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 174,
+        "output_chars": 864,
+        "gen_seconds": 9.434,
+        "text": "PROBLEM STATEMENT:\nA DevOps engineer on an internal tools team reports that deprovisioned users retain application access for several hours after removal in the identity provider. The lag creates an access-lifecycle gap that fails security review.\n\nUSER STORY:\nAs a DevOps engineer on an internal tools team, I want immediate revocation of sessions and permissions when a SCIM deprovision event arrives, So that offboarded or suspended accounts lose access within the documented offboarding SLA.\n\nACCEPTANCE CRITERIA:\nScenario: Deprovisioned user retains access\nGiven a user is removed or suspended in the identity provider\nWhen the SCIM deprovisioning event is delivered to the application\nThen the user's active sessions are terminated and application permissions are revoked within the SLA window\nAnd the revocation is recorded with a timestamp in the audit log"
+      }
+    },
+    {
+      "id": "ingest-037",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 143,
+        "output_chars": 741,
+        "gen_seconds": 5.373,
+        "text": "PROBLEM STATEMENT:\nThe ingest endpoint returns 200 instantly and invalid payloads are lost, resulting in missing rows in the customer-facing dataset.\n\nUSER STORY:\nAs a data platform engineer, I want the ingest endpoint to handle invalid payloads and return a meaningful error response, so that I can investigate and resolve issues with missing rows in the customer-facing dataset.\n\nACCEPTANCE CRITERIA:\nScenario: The ingest endpoint receives an invalid payload.\n  Given: The payload is malformed and cannot be parsed.\n  When: The endpoint attempts to process the payload.\n  Then: The endpoint returns a 400 error response with a meaningful error message.\n  And: The error response includes the specific error details that caused the failure."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 177,
+        "output_chars": 958,
+        "gen_seconds": 8.73,
+        "text": "PROBLEM STATEMENT:\nA data platform engineer at a retail analytics company reports that the ingestion API acknowledges payloads with a 200 before validation, so invalid records fail invisibly with no error surface. Data-completeness SLAs are breached silently and engineers trace losses through logs by hand.\n\nUSER STORY:\nAs a data platform engineer at a retail analytics company, I want synchronous validation with a structured per-record error report for every rejected payload, So that invalid records are rejected at submission time and never disappear silently.\n\nACCEPTANCE CRITERIA:\nScenario: Invalid payload accepted with success status\nGiven a client submits a payload that violates the ingestion schema\nWhen the API responds\nThen the response is a 4xx with a per-record error list identifying each violation\nAnd partially valid batches report accepted and rejected records separately\nAnd every rejection is queryable via an errors endpoint for 7 days"
+      }
+    },
+    {
+      "id": "auth-002",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 130,
+        "output_chars": 702,
+        "gen_seconds": 4.657,
+        "text": "PROBLEM STATEMENT:\nThe corporate login flow for promoted users is not accurately reflecting their updated permissions, resulting in delayed updates and potential security risks.\n\nUSER STORY:\nAs a helpdesk technician, I want the corporate login flow to accurately reflect the updated permissions of promoted users, so that I can provide timely and effective support to our users.\n\nACCEPTANCE CRITERIA:\nGiven the user's permissions are updated in the database\nWhen the user logs in to the corporate login flow\nThen the UI should display the updated permissions\nAnd the mapping UI should reflect the new group and permissions\nAnd the updated permissions are persisted in the cache for a specified duration"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 167,
+        "output_chars": 916,
+        "gen_seconds": 8.451,
+        "text": "PROBLEM STATEMENT:\nA helpdesk technician at a regional healthcare group reports that role changes made in the administration console do not propagate to active user sessions until a delayed sync completes. Users operate with stale permissions, which forces risky temporary-access workarounds.\n\nUSER STORY:\nAs a helpdesk technician at a regional healthcare group, I want event-driven synchronization of permission changes for active users, So that permission changes take effect within minutes instead of after a nightly batch.\n\nACCEPTANCE CRITERIA:\nScenario: Role change does not propagate to active session\nGiven a user holds a role whose grant changes in the administration console\nWhen the change event is dispatched to the synchronization service\nThen the user's session is updated to hold the new permission combination within 5 minutes\nAnd both the old and new permission states are captured in the audit trail"
+      }
+    },
+    {
+      "id": "reports-016",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 159,
+        "output_chars": 796,
+        "gen_seconds": 5.644,
+        "text": "PROBLEM STATEMENT:\nOur team relies on the scheduled reports feature, but it is not accurate, causing discrepancies between the dashboard pull and the API pull, leading to confusion and mistrust among team members.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want the scheduled reports feature to accurately tie out between the dashboard pull and the API pull, so that I can trust the data and make informed decisions.\n\nACCEPTANCE CRITERIA:\nScenario: The scheduled reports feature is run and the dashboard pull and API pull are generated.\nGiven: The dashboard pull and API pull are generated with the correct data.\nWhen: The scheduled reports feature is run and the data is compared.\nThen: The data from the dashboard pull and API pull matches exactly, and the reports are accurate."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 147,
+        "output_chars": 825,
+        "gen_seconds": 7.656,
+        "text": "PROBLEM STATEMENT:\nA reporting coordinator in a PMO office reports that identical metrics return different values from the dashboard and the reporting API because their definitions have drifted. Metrics reviews stall on reconciliation disputes and automated reports contradict executive dashboards.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want a single shared metric definition serving both the dashboard and the API, So that the same metric returns the same value through every consumption path.\n\nACCEPTANCE CRITERIA:\nScenario: API and dashboard metrics disagree\nGiven the same metric and parameters queried via the dashboard and the API\nWhen both results are retrieved\nThen the values are identical, produced by one versioned metric definition\nAnd metric definitions are documented with owner and version"
+      }
+    },
+    {
+      "id": "reports-002",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 217,
+        "output_chars": 1099,
+        "gen_seconds": 7.324,
+        "text": "PROBLEM STATEMENT: \nScheduled reports feature is not accurately displaying cohort months, resulting in incorrect renewal predictions.\n\nUSER STORY: \nAs a marketing operations manager, I want the scheduled reports feature to accurately display cohort months, so that I can make informed decisions about renewal predictions.\n\nACCEPTANCE CRITERIA: \nScenario: The scheduled report for a given date shows the correct cohort month.\n  Given: The report is generated for a specific date.\n  When: The report is displayed.\n  Then: The cohort month is accurate and reflects the correct renewal period.\n \nScenario: The scheduled report for a given date shows the correct renewal period.\n  Given: The report is generated for a specific date.\n  When: The report is displayed.\n  Then: The renewal period is accurate and reflects the correct time frame.\n \nScenario: The scheduled report for a given date shows the correct account creation date.\n  Given: The report is generated for a specific date.\n  When: The report is displayed.\n  Then: The account creation date is accurate and reflects the correct cohort month."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 150,
+        "output_chars": 846,
+        "gen_seconds": 8.132,
+        "text": "PROBLEM STATEMENT:\nA marketing operations manager reports that the cohort retention chart assigns accounts to the wrong month, shifting renewal labels one month early. Revenue forecasts built on the chart were materially incorrect and required board-level correction.\n\nUSER STORY:\nAs a marketing operations manager, I want cohort labels computed from account activation dates with documented month-boundary rules, So that retention figures reconcile with billing records month by month.\n\nACCEPTANCE CRITERIA:\nScenario: Retention cohort labels off by one month\nGiven accounts activated on different days within a month\nWhen the cohort retention chart is rendered\nThen each account is assigned to the cohort defined by the documented month-boundary rule and labels match billing periods\nAnd the chart's cohort definition is documented and versioned"
+      }
+    },
+    {
+      "id": "rbac-033",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 150,
+        "output_chars": 754,
+        "gen_seconds": 5.138,
+        "text": "PROBLEM STATEMENT: \nThe export actions in the access management module do not leave any trace in the audit trail, causing compliance issues and hindering investigations.\n\nUSER STORY: \nAs a product owner responsible for internal tooling, I want the export actions in the access management module to leave a clear and auditable trail, so that compliance issues can be more easily identified and investigated.\n\nACCEPTANCE CRITERIA: \nScenario: A user exports data from the access management module.\nGiven: The user has the necessary permissions to export data.\nWhen: The user initiates the export process.\nThen: The exported data is logged in the audit trail with a clear timestamp and user activity.\nAnd: The audit trail is easily searchable and exportable."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 157,
+        "output_chars": 801,
+        "gen_seconds": 8.425,
+        "text": "PROBLEM STATEMENT:\nA product owner for internal tooling reports that data export actions are not recorded in the audit log, making it impossible to attribute exported files to a user. Compliance reviews cannot verify who exported records containing personal data.\n\nUSER STORY:\nAs a product owner for internal tooling, I want every data export to be captured in the audit log with actor, scope, and timestamp, So that data movement out of the platform is attributable during compliance reviews.\n\nACCEPTANCE CRITERIA:\nScenario: Audit log omits data export events\nGiven a user with export permission exports a dataset\nWhen the export completes\nThen an audit event records the actor, dataset scope, row count, and timestamp\nAnd audit events for exports are retained for the same period as other audit data"
+      }
+    },
+    {
+      "id": "reports-015",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 157,
+        "output_chars": 774,
+        "gen_seconds": 5.539,
+        "text": "PROBLEM STATEMENT:\nThe main dashboard of the analytics workspace takes 30+ seconds to load for quarter-over-quarter views.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want the main dashboard to load within a reasonable time frame (e.g., 10 seconds) for quarter-over-quarter views, so that I can efficiently manage the analytics workspace and respond to analyst requests.\n\nACCEPTANCE CRITERIA:\nGiven the dashboard is set to display quarter-over-quarter views\nWhen the user requests to view the dashboard\nThen the dashboard should load within 10 seconds\nAnd the user should be able to interact with the dashboard without significant delay\nAnd the user should be able to view the dashboard for other time ranges (e.g., month-over-month) without significant delay"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 155,
+        "output_chars": 805,
+        "gen_seconds": 8.664,
+        "text": "PROBLEM STATEMENT:\nA reporting coordinator in a PMO office reports that the main dashboard takes over 30 seconds to render quarter-over-quarter comparisons, driving executives and analysts away from self-service analytics. Decision-making regresses to ad-hoc email summaries.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want dashboard queries over long date ranges to return within 5 seconds, So that quarter-level analysis is interactive rather than a blocking wait.\n\nACCEPTANCE CRITERIA:\nScenario: Dashboard times out on long ranges\nGiven a dashboard view spanning a multi-month or quarter-over-quarter range\nWhen the view is loaded\nThen first meaningful render completes within 5 seconds using pre-aggregated data\nAnd widgets render progressively rather than blocking on the slowest tile"
+      }
+    },
+    {
+      "id": "rbac-045",
+      "domain": "rbac",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 221,
+        "output_chars": 1118,
+        "gen_seconds": 8.397,
+        "text": "PROBLEM STATEMENT:\nThe workspace roles system defaults new tokens to owner-level rights with no restriction, allowing leaked tokens to expose sensitive information.\n\nUSER STORY:\nAs a compliance auditor, I want the workspace roles system to default new tokens to the lowest allowed permission, so that leaked tokens do not expose sensitive information.\n\nACCEPTANCE CRITERIA:\nScenario: A new token is created with default permissions.\n  Given: The workspace roles system is configured to default new tokens to the lowest allowed permission.\n  When: A new token is created.\n  Then: The token is assigned the lowest allowed permission.\n\nScenario: A leaked token is used to access a restricted area.\n  Given: A token with owner-level rights is leaked.\n  When: The leaked token is used to access a restricted area.\n  Then: Access is denied due to insufficient permissions.\n\nScenario: A leaked CI token is used to access sensitive information.\n  Given: A CI token with owner-level rights is leaked.\n  When: The leaked CI token is used to access sensitive information.\n  Then: Access is denied due to insufficient permissions."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 149,
+        "output_chars": 817,
+        "gen_seconds": 7.968,
+        "text": "PROBLEM STATEMENT:\nA compliance auditor at a financial services firm reports that newly created API tokens inherit the creator's full permissions by default with no scope selection. A single leaked token from a CI system exposes everything its owner can access, which fails security review.\n\nUSER STORY:\nAs a compliance auditor at a financial services firm, I want scoped API tokens where permissions are selected explicitly at creation, So that machine credentials carry only the permissions their integration requires.\n\nACCEPTANCE CRITERIA:\nScenario: API token defaults to owner permissions\nGiven a user creates a new API token\nWhen the creation flow is completed\nThen the token is issued with only the scopes explicitly selected during creation\nAnd existing tokens can have their scopes narrowed without reissuance"
+      }
+    },
+    {
+      "id": "reports-029",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 126,
+        "output_chars": 666,
+        "gen_seconds": 4.989,
+        "text": "PROBLEM STATEMENT:\nThe analytics workspace is slow when loading a quarter-range view, causing users to assume it's broken and leading to analysts batching questions to avoid the wait.\n\nUSER STORY:\nAs a board materials executive assistant, I want the analytics workspace to load quarter-range views quickly, so that I can efficiently prepare board materials without delays.\n\nACCEPTANCE CRITERIA:\nGiven the analytics workspace is in a stable state\nWhen I request to load a quarter-range view\nThen the workspace should load the view within a reasonable time frame\nAnd the workspace should display the requested data\nAnd the workspace should not display an error message"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 159,
+        "output_chars": 808,
+        "gen_seconds": 8.646,
+        "text": "PROBLEM STATEMENT:\nA executive assistant preparing board materials reports that chart rendering takes over 30 seconds for medium-sized datasets and 2 minutes for large ones. Decision-making regresses to ad-hoc email summaries and 1-on-1 meetings.\n\nUSER STORY:\nAs a executive assistant preparing board materials, I want charts that render sub-60-second and integrate directly into the report, So that decision-makers can analyze datasets without waiting for a long sync.\n\nACCEPTANCE CRITERIA:\nScenario: Slow chart rendering\nGiven a report containing a dataset larger than 10,000 rows\nWhen the report is opened and the chart is first rendered\nThen the chart renders within 60 seconds and renders with the same visualization as the embedded spreadsheet\nAnd widgets render without blocking the rest of the report"
+      }
+    },
+    {
+      "id": "reports-038",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 217,
+        "output_chars": 1123,
+        "gen_seconds": 8.101,
+        "text": "PROBLEM STATEMENT:\nThe executive assistant is manually rebuilding retention in a spreadsheet, which is causing delays and inaccuracies.\n\nUSER STORY:\nAs a member of the executive assistant team, I want to automate the rebuilding of retention in the reporting dashboard, so that I can focus on other tasks and ensure accurate and timely reporting.\n\nACCEPTANCE CRITERIA:\nScenario: The reporting dashboard displays the correct cohort months.\n  Given: The dashboard is updated with the latest billing records.\n  When: The dashboard is refreshed.\n  Then: The cohort months are displayed correctly, with renewals shifted by one month.\n\nScenario: The dashboard displays the correct renewals.\n  Given: The dashboard is updated with the latest billing records.\n  When: The dashboard is refreshed.\n  Then: The renewals are displayed correctly, with the correct cohort months.\n\nScenario: The dashboard displays accurate retention data.\n  Given: The dashboard is updated with the latest billing records.\n  When: The dashboard is refreshed.\n  Then: The retention data is displayed accurately, with the correct cohort months and renewals."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 154,
+        "output_chars": 880,
+        "gen_seconds": 7.976,
+        "text": "PROBLEM STATEMENT:\nA executive assistant preparing board materials reports that the cohort retention chart assigns accounts to the wrong month, shifting renewal labels one month early. Revenue forecasts built on the chart were materially incorrect and required board-level correction.\n\nUSER STORY:\nAs a executive assistant preparing board materials, I want cohort labels computed from account activation dates with documented month-boundary rules, So that retention figures reconcile with billing records month by month.\n\nACCEPTANCE CRITERIA:\nScenario: Retention cohort labels off by one month\nGiven accounts activated on different days within a month\nWhen the cohort retention chart is rendered\nThen each account is assigned to the cohort defined by the documented month-boundary rule and labels match billing periods\nAnd the chart's cohort definition is documented and versioned"
+      }
+    },
+    {
+      "id": "auth-015",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 148,
+        "output_chars": 754,
+        "gen_seconds": 5.211,
+        "text": "PROBLEM STATEMENT:\nSAML logins fail with 'Assertion not yet valid' for a chunk of users, resulting in them being locked out until manually clock-nudged.\n\nUSER STORY:\nAs a SAML login administrator, I want to implement a mechanism to automatically validate and update the assertion time for users experiencing this issue, so that users are not locked out unnecessarily.\n\nACCEPTANCE CRITERIA:\nGiven the SAML login system is configured to use a specific assertion time validation mechanism\nWhen a user attempts to log in with an invalid assertion time\nThen the system should automatically validate and update the assertion time\nAnd the user should be allowed to log in successfully after the update\nAnd the system logs the successful update and login attempt"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 178,
+        "output_chars": 971,
+        "gen_seconds": 9.78,
+        "text": "PROBLEM STATEMENT:\nA engineering manager at a startup scaling past 200 employees reports that SAML assertions are rejected with 'not yet valid' errors whenever identity-provider and service-provider clocks drift by a few minutes. The rejections intermittently lock users out of the application.\n\nUSER STORY:\nAs a engineering manager at a startup scaling past 200 employees, I want a configurable clock-skew tolerance applied when validating SAML assertions, So that minor clock drift between the identity provider and the service provider does not block authentication.\n\nACCEPTANCE CRITERIA:\nScenario: SAML assertion rejected due to clock skew\nGiven the identity provider clock differs from the service provider clock by less than the configured skew tolerance\nWhen the service provider validates an incoming SAML assertion\nThen the assertion is accepted and the user completes single sign-on\nAnd the effective skew at validation time is written to the authentication log"
+      }
+    },
+    {
+      "id": "billing-025",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 172,
+        "output_chars": 903,
+        "gen_seconds": 6.367,
+        "text": "PROBLEM STATEMENT:\nOur team relies on the billing portal all day — I'm the procurement analyst at a university system. Our accounting sync moves invoices but silently drops credit notes. Our accountants noticed first during close. The books don't match the billing system and closing takes days longer.\n\nUSER STORY:\nAs a procurement analyst at a university system, I want the billing portal to accurately sync invoices and credit notes, so that our accounting process can run smoothly and efficiently.\n\nACCEPTANCE CRITERIA:\nScenario: The billing portal is used to create and manage invoices and credit notes.\nGiven: The accounting sync is enabled on the billing portal.\nWhen: A credit note is created and submitted to the billing portal.\nThen: The credit note is successfully synced with the accounting system and marked as processed.\nAnd: The accounting system reflects the updated credit note balance."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 153,
+        "output_chars": 842,
+        "gen_seconds": 8.573,
+        "text": "PROBLEM STATEMENT:\nA procurement analyst at a university system reports that credit notes are not synchronized to the accounting system even though invoices sync correctly. The books diverge from the billing platform and month-end close requires manual journal entries.\n\nUSER STORY:\nAs a procurement analyst at a university system, I want credit notes to sync to the accounting system with the same reliability as invoices, So that the accounting ledger always reflects refunds and credits without manual entry.\n\nACCEPTANCE CRITERIA:\nScenario: Credit note fails to sync to accounting\nGiven a credit note is issued against a previously synced invoice\nWhen the accounting synchronization runs\nThen the credit note is created in the accounting system and linked to the original invoice\nAnd a sync failure raises an alert and retries with backoff"
+      }
+    },
+    {
+      "id": "ingest-045",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 150,
+        "output_chars": 710,
+        "gen_seconds": 5.924,
+        "text": "PROBLEM STATEMENT:\nBulk uploads of data over 10MB fail with a 502 status code from the gateway, causing delays in processing customer data.\n\nUSER STORY:\nAs a growth org analytics engineer, I want to be able to upload large datasets without hitting the payload size ceiling, so that I can process customer data in a timely manner.\n\nACCEPTANCE CRITERIA:\nGiven the REST API endpoint is configured to handle large payloads\nWhen a bulk upload request is made with a payload size of 10MB or less\nThen the request is processed successfully and returns a 200 status code\nAnd when a bulk upload request is made with a payload size of 10MB or more\nThen the request is split into smaller chunks and processed successfully"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 160,
+        "output_chars": 840,
+        "gen_seconds": 8.691,
+        "text": "PROBLEM STATEMENT:\nA analytics engineer supporting the growth org reports that bulk upload requests larger than roughly 10MB are rejected by the gateway with a 502 before reaching the ingestion service. Nightly integration jobs fragment into manual shards and deliver customer data late.\n\nUSER STORY:\nAs a analytics engineer supporting the growth org, I want bulk upload support for large payloads via chunked or resumable ingestion, So that nightly batch imports of any practical size complete without sharding workarounds.\n\nACCEPTANCE CRITERIA:\nScenario: Bulk upload fails for large payloads\nGiven a client prepares a bulk import larger than 10MB\nWhen the import is submitted\nThen the upload is accepted, processed completely, and reports per-record acceptance results\nAnd an interrupted upload can resume from the last acknowledged chunk"
+      }
+    },
+    {
+      "id": "ingest-050",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 164,
+        "output_chars": 848,
+        "gen_seconds": 6.343,
+        "text": "PROBLEM STATEMENT:\nThe ingest endpoint returns a 200 status code instantly, but fails to validate the payload, resulting in invalid data being accepted and subsequently vanishing, causing engineers to spend days correlating logs to identify issues.\n\nUSER STORY:\nAs a platform site reliability engineer, I want the ingest endpoint to validate payloads in real-time, so that I can immediately identify and address issues, reducing the time spent correlating logs and resolving problems.\n\nACCEPTANCE CRITERIA:\nScenario: The ingest endpoint returns a 200 status code with a valid payload.\nGiven: The payload is valid and has been successfully validated.\nWhen: The ingest endpoint is called with a valid payload.\nThen: The endpoint returns a 200 status code with a success message.\nAnd: The payload is stored in the database with validation information."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 169,
+        "output_chars": 922,
+        "gen_seconds": 8.802,
+        "text": "PROBLEM STATEMENT:\nA platform site reliability engineer reports that the ingestion API acknowledges payloads with a 200 before validation, so invalid records fail invisibly with no error surface. Data-completeness SLAs are breached silently and engineers trace losses through logs by hand.\n\nUSER STORY:\nAs a platform site reliability engineer, I want synchronous validation with a structured per-record error report for every rejected payload, So that invalid records are rejected at submission time and never disappear silently.\n\nACCEPTANCE CRITERIA:\nScenario: Invalid payload accepted with success status\nGiven a client submits a payload that violates the ingestion schema\nWhen the API responds\nThen the response is a 4xx with a per-record error list identifying each violation\nAnd partially valid batches report accepted and rejected records separately\nAnd every rejection is queryable via an errors endpoint for 7 days"
+      }
+    },
+    {
+      "id": "billing-040",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 133,
+        "output_chars": 623,
+        "gen_seconds": 4.864,
+        "text": "PROBLEM STATEMENT: \nThe billing support specialist at an e-commerce platform is unable to reconcile the discrepancy between the 'paid' status in the UI and the reminder email sent for settled invoices.\n\nUSER STORY: \nAs a billing support specialist, I want the system to accurately reflect the status of invoices as 'overdue' instead of 'paid' in the UI, so that I can correctly identify and follow up on outstanding invoices.\n\nACCEPTANCE CRITERIA: \nScenario: Given the invoice is settled and the dunning system is enabled, When the UI is accessed, Then the invoice status should be displayed as 'overdue' instead of 'paid'."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 808,
+        "gen_seconds": 8.141,
+        "text": "PROBLEM STATEMENT:\nA billing support specialist at an e-commerce platform reports that dunning emails are sent for invoices the customer has already paid, because the collection job reads stale invoice status. Customers receive threatening notices on settled accounts and escalate to support.\n\nUSER STORY:\nAs a billing support specialist at an e-commerce platform, I want dunning emails that are suppressed the moment an invoice is paid, So that customers never receive collection notices for settled invoices.\n\nACCEPTANCE CRITERIA:\nScenario: Dunning notice sent for paid invoice\nGiven an invoice is scheduled for a dunning reminder\nWhen the invoice is paid before the reminder is dispatched\nThen the reminder is cancelled and no dunning email is sent\nAnd the suppression is logged with the payment reference"
+      }
+    },
+    {
+      "id": "reports-022",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 166,
+        "output_chars": 821,
+        "gen_seconds": 5.944,
+        "text": "PROBLEM STATEMENT: \nThe reporting suite's network tab is unable to handle comparison queries across two quarters, resulting in a 20-second query and hindering ad-hoc decision-making.\n\nUSER STORY: \nAs a reporting coordinator in a PMO office, I want the reporting suite's network tab to be able to handle comparison queries across two quarters without significant delays, so that I can make timely and informed decisions.\n\nACCEPTANCE CRITERIA: \nScenario: The reporting suite's network tab is queried with a comparison across two quarters.\nGiven: The query is executed on a standard reporting suite instance.\nWhen: The query takes less than 10 seconds to complete.\nThen: The reporting suite displays the results without errors or delays.\nAnd: The reporting suite allows for ad-hoc decision-making based on the query results."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 147,
+        "output_chars": 772,
+        "gen_seconds": 8.001,
+        "text": "PROBLEM STATEMENT:\nA reporting coordinator in a PMO office reports that the largest reporting datasets take over 30 seconds to render, driving executives and analysts away from self-service analytics. Decision-making regresses to ad-hoc email summaries.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want fast, interactive reporting over large datasets, So that executives and analysts can explore trends and metrics without waiting for a long-running batch report.\n\nACCEPTANCE CRITERIA:\nScenario: Long-running reports fail to render\nGiven a report whose result set exceeds 100,000 rows\nWhen the report is submitted\nThen first meaningful render completes within 5 seconds using an incremental query\nAnd widgets render correctly within the interactive timeline"
+      }
+    },
+    {
+      "id": "auth-035",
+      "domain": "auth",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 713,
+        "gen_seconds": 5.292,
+        "text": "PROBLEM STATEMENT: \nThe Okta integration causes repeated push prompts on trusted devices, resulting in MFA fatigue and significant time losses for field teams.\n\nUSER STORY: \nAs a DevOps engineer, I want to minimize the number of repeated push prompts on trusted devices, so that I can reduce the time lost due to MFA fatigue and improve the overall efficiency of the team.\n\nACCEPTANCE CRITERIA: \nScenario: The Okta integration is configured to use a trusted device list.\nGiven: The device list is populated with trusted devices.\nWhen: A user attempts to access the system from a trusted device.\nThen: The user is not prompted for MFA.\nAnd: The system authenticates the user successfully without prompting for MFA."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 170,
+        "output_chars": 896,
+        "gen_seconds": 9.47,
+        "text": "PROBLEM STATEMENT:\nA DevOps engineer on an internal tools team reports that authentication on trusted devices becomes a repeated prompt-fest, driving users away from self-service login. The repeated prompts violate the service-level SLA and cause an avoidable onboarding headache.\n\nUSER STORY:\nAs a DevOps engineer on an internal tools team, I want a configurable trusted-device policy that honors the user's stored authentication-state, So that authenticated users on trusted devices are not prompted for credentials every time.\n\nACCEPTANCE CRITERIA:\nScenario: MFA prompt on trusted device\nGiven a user authenticates successfully from a device that has been approved by the policy\nWhen the user returns to that device within the trusted-window time frame\nThen the session proceeds without an additional MFA prompt\nAnd the trusted-device status is persisted for the duration of the active session"
+      }
+    },
+    {
+      "id": "reports-050",
+      "domain": "reports",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 151,
+        "output_chars": 744,
+        "gen_seconds": 5.232,
+        "text": "PROBLEM STATEMENT: \nPrinting a report to PDF loses the right-hand columns, charts render as empty boxes, and board materials are now assembled manually from screenshots.\n\nUSER STORY: \nAs a reporting coordinator, I want the scheduled reports feature to print reports to PDF with the correct layout, including all columns and charts, so that I can easily share and review reports with stakeholders.\n\nACCEPTANCE CRITERIA: \nScenario: The report is printed to PDF\n  Given the report layout is set to include all columns\n  When the report is printed to PDF\n  Then the PDF contains all columns, including the right-hand column\n  And the charts are rendered correctly, without empty boxes\n  And the board materials are automatically included in the PDF"
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 170,
+        "output_chars": 931,
+        "gen_seconds": 9.438,
+        "text": "PROBLEM STATEMENT:\nA reporting coordinator in a PMO office reports that PDF exports truncate wide tables at the page boundary and omit chart visualizations entirely. Board materials must be assembled manually from screenshots, and one committee received silently truncated financial tables.\n\nUSER STORY:\nAs a reporting coordinator in a PMO office, I want PDF exports that paginate wide tables and render all charts, So that exported PDFs are complete, presentation-ready versions of the on-screen report.\n\nACCEPTANCE CRITERIA:\nScenario: PDF export truncates wide tables\nGiven a report containing tables wider than one printed page and embedded charts\nWhen the report is exported to PDF\nThen wide tables paginate across pages with repeated headers and every chart renders as an image\nAnd landscape orientation is applied automatically when tables exceed portrait width\nAnd the exported PDF includes page numbers and the report title"
+      }
+    },
+    {
+      "id": "billing-019",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 153,
+        "output_chars": 822,
+        "gen_seconds": 5.681,
+        "text": "PROBLEM STATEMENT: \nThe billing portal fails to update customer addresses in PDF invoices after the customer has updated their address information.\n\nUSER STORY: \nAs a procurement analyst, I want the billing portal to update customer addresses in PDF invoices after the customer has updated their address information, \nSo that I can ensure accurate and up-to-date billing and avoid rejecting invoices due to outdated addresses.\n\nACCEPTANCE CRITERIA: \nScenario: A customer updates their address information in the account page.\nGiven: The customer's new address is saved in the system.\nWhen: The billing portal is run with the updated customer information.\nThen: The PDF invoices generated show the customer's new address.\nAnd: The accounting department accepts the invoices without rejecting them due to outdated addresses."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 146,
+        "output_chars": 813,
+        "gen_seconds": 8.225,
+        "text": "PROBLEM STATEMENT:\nA procurement analyst at a university system reports that generated invoice PDFs render a stale billing address even after the customer updates their profile. The invoices contradict the billing contact information the customer has on file.\n\nUSER STORY:\nAs a procurement analyst at a university system, I want invoice PDFs that always render the customer's current billing details, So that invoices are accepted by customer accounting systems on first submission.\n\nACCEPTANCE CRITERIA:\nScenario: Invoice renders stale billing address\nGiven a customer updates their billing address on their account\nWhen a new invoice PDF is generated\nThen the PDF displays the current billing address from the customer profile\nAnd regenerating an existing invoice uses the address that was current at issue time"
+      }
+    },
+    {
+      "id": "billing-035",
+      "domain": "billing",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 138,
+        "output_chars": 666,
+        "gen_seconds": 5.435,
+        "text": "PROBLEM STATEMENT:\nThe retry button in the invoicing console generates a new invoice instead of reusing the original.\n\nUSER STORY:\nAs a finance lead at a B2B SaaS startup, I want the retry button in the invoicing console to reuse the original invoice instead of generating a new one, So that I can efficiently manage and track invoices without unnecessary duplication.\n\nACCEPTANCE CRITERIA:\nScenario: The retry button is clicked in the invoicing console.\nGiven: The original invoice is generated and displayed in the console.\nWhen: The retry button is clicked.\nThen: The original invoice is reused and displayed in the console.\nAnd: The new invoice is not generated."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 163,
+        "output_chars": 799,
+        "gen_seconds": 8.652,
+        "text": "PROBLEM STATEMENT:\nA finance lead at a B2B SaaS startup reports that retrying a failed payment creates a duplicate invoice instead of reusing the original, resulting in double charges and customer disputes. Refunding duplicates is manual and reconciliation-heavy.\n\nUSER STORY:\nAs a finance lead at a B2B SaaS startup, I want idempotent payment retries that reuse the original invoice, So that customers are never double-billed when a payment is retried.\n\nACCEPTANCE CRITERIA:\nScenario: Payment retry creates duplicate invoice\nGiven a payment attempt on an existing invoice fails\nWhen the payment is retried by the customer or by the dunning system\nThen the retry is applied to the same invoice and no duplicate invoice is created\nAnd the invoice payment history records each attempt with its outcome"
+      }
+    },
+    {
+      "id": "ingest-026",
+      "domain": "ingest",
+      "base": {
+        "gherkin_compliance": false,
+        "has_preamble": false,
+        "output_tokens": 220,
+        "output_chars": 980,
+        "gen_seconds": 8.278,
+        "text": "PROBLEM STATEMENT:\nThe backend API returns a 429 status code without providing any indication of when to retry, causing unpredictable sync job failures and paging the on-call engineer.\n\nUSER STORY:\nAs a backend engineer, I want the API to return a retry hint or indication when it returns a 429 status code, so that I can diagnose and resolve the issue more effectively.\n\nACCEPTANCE CRITERIA:\nScenario: The API returns a 429 status code with a retry hint.\n  Given the API returns a 429 status code with a \"retry-after\" header.\n  When the API returns a 429 status code with a \"retry-after\" header.\n  Then the \"retry-after\" header value is provided in the response body.\n\nScenario: The API returns a 429 status code without a retry hint.\n  Given the API returns a 429 status code without a \"retry-after\" header.\n  When the API returns a 429 status code without a \"retry-after\" header.\n  Then an error message is returned in the response body indicating that a retry is not possible."
+      },
+      "finetuned": {
+        "gherkin_compliance": true,
+        "has_preamble": false,
+        "output_tokens": 153,
+        "output_chars": 775,
+        "gen_seconds": 7.905,
+        "text": "PROBLEM STATEMENT:\nA backend engineer on the integrations team reports that HTTP 429 responses omit rate-limit and retry-timing headers, leaving clients to guess backoff behavior. Synchronization jobs fail unpredictably and cause avoidable on-call pages.\n\nUSER STORY:\nAs a backend engineer on the integrations team, I want standard rate-limit headers including Retry-After on every 429 response, So that clients can honor rate limits deterministically instead of guessing.\n\nACCEPTANCE CRITERIA:\nScenario: Rate limit response omits retry-after header\nGiven a client exceeds its API rate limit\nWhen the API returns a 429 response\nThen the response includes Retry-After plus quota and reset headers\nAnd successful responses include remaining-quota headers for the current window"
+      }
+    }
+  ]
+}

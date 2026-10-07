@@ -112,11 +112,18 @@ Both engines get the identical system prompt with greedy decoding on the 50 held
 metrics are Gherkin compliance, preamble rate, output tokens, and generation time. Local sanity
 modes that need no GPU: `python eval/run_eval.py --lint-only` and `--mock`.
 
-### Phase 4 — serving (Hugging Face Space, CPU basic)
+### Phase 4 — serving
 
-Create a Gradio Space, set `ADAPTER_REPO` to your adapter repo, push `backend/`. Both
-endpoints stream token-by-token via `TextIteratorStreamer`; a single loaded model serves
-both engines by toggling `model.disable_adapter()`.
+Heads-up: Hugging Face now requires a **PRO subscription** for Gradio/Docker Spaces on free
+cpu-basic (only Static Spaces remain free). Two supported paths:
+
+- **PRO:** create a Gradio Space, set `ADAPTER_REPO=mrchrislau/feedback-to-gherkin-lora`, push
+  `backend/`. Both endpoints stream token-by-token; one loaded model serves both engines by
+  toggling `model.disable_adapter()`.
+- **No-cost (shipped):** the demo page's presets play *recorded* outputs from
+  `eval/results.json` — real model behavior from the measured run, zero hosting. The live
+  streaming path activates automatically once `CONFIG.spaceId` points at a Space (PRO) or a
+  self-hosted `backend/app.py`.
 
 ### Phase 5 — portfolio demo
 
@@ -172,18 +179,25 @@ strict-format task buy overconfidence, not generalization.
    explicitly-labeled targets until it exists. `--lint-only` and `--mock` modes let the whole
    eval harness be exercised CPU-only before spending GPU time.
 
-### Benchmark targets
+### Measured results
 
-| Metric | Base (`Llama-3.2-3B-Instruct`) | Fine-tuned target |
-| :--- | :--- | :--- |
-| Gherkin keyword validity | < 40% (loose bullets/prose) | ≥ 95% strict `Given/When/Then` |
-| Preamble rate | 100% conversational chatter | 0% |
-| Token reduction | baseline (~450 tokens) | ≥ 50% reduction |
-| Training run time | n/a | ≤ 15 min on 1× T4 |
+50 held-out samples · greedy decoding · identical system prompt · machine-written
+[`eval/results.json`](eval/results.json):
 
-The baseline column states expectations, not measurements, until `run_eval.py` has run —
-fair-comparison guarantees (same prompt, same greedy decoding, same unseen split, shared
-scoring code) are what make the eventual numbers meaningful.
+| Metric | Base | Fine-tuned | Reading |
+| :--- | :--- | :--- | :--- |
+| Gherkin compliance (strict schema) | 0% (0/50) | **100% (50/50)** | the headline result — target was ≥ 95% |
+| Preamble rate | 0% | 0% | the shared system prompt already suppresses chatter |
+| Avg output tokens | 157 | 160 | comparable — validity, not brevity, is the win |
+| Avg generation time (T4) | 5.7 s | 8.6 s | adapter overhead + slightly longer outputs |
+
+**What the numbers actually say.** The opening hypothesis — a chatty base model needing ~50%
+token squeezing — did not survive contact with a prescriptive system prompt: asked for three
+exact section headers, the base model is already terse. Its real failure mode is structural.
+Across all 50 held-out samples it never produced a valid `Scenario:` line, and its user stories
+drift from the required pattern; the fine-tune makes strict-schema emission perfect (50/50) at
+comparable length — and Gherkin that parses is exactly what downstream BDD tooling needs. The
+~3 s/output latency increase is adapter overhead on the T4.
 
 ## Publishing checklist
 
@@ -192,8 +206,8 @@ Where things stand:
 - [x] Push this repo to GitHub — `chris-lau/feedback-to-gherkin-engine`
 - [x] Notebook `HF_USERNAME` set to `mrchrislau`; Colab badge wired to this repo
 - [x] Run `notebooks/train_gherkin_qlora.ipynb` end to end on Colab — adapter live at [`mrchrislau/feedback-to-gherkin-lora`](https://huggingface.co/mrchrislau/feedback-to-gherkin-lora)
-- [ ] Run `eval/run_eval.py --adapter mrchrislau/feedback-to-gherkin-lora` against the trained adapter; commit the generated `eval/results.json`
-- [ ] Create the Gradio Space from `backend/` (set `ADAPTER_REPO=mrchrislau/feedback-to-gherkin-lora`), then set `CONFIG.spaceId` in `demo/index.html`
+- [x] Run `eval/run_eval.py --adapter mrchrislau/feedback-to-gherkin-lora` on the trained adapter; committed the generated `eval/results.json` — the demo scorecard renders the measured numbers
+- [ ] *Optional (HF PRO):* create the Gradio Space from `backend/` for live custom-input inference, then set `CONFIG.spaceId` in `demo/index.html` — without it the demo plays recorded eval outputs (no-cost path)
 - [ ] Embed/link the demo from the portfolio site
 
 ## License

@@ -49,20 +49,21 @@ SYSTEM_PROMPT = (
 )
 
 PRESETS = {
-    "SAML SSO Session Timeout": (
-        "Our team relies on the Okta integration all day — I'm the IT operations lead at a "
-        "mid-size fintech. Basically, sessions keep expiring mid-workday and everyone has to "
-        "re-authenticate constantly. Helpdesk tickets about this spiked to ~40 last week alone."
+    "SAML SSO Clock-Skew Lockout": (
+        "I'm the IT operations lead at a mid-size fintech here and I look after the corporate login flow. "
+        "Basically, SAML logins fail with 'Assertion not yet valid' for a chunk of our users. "
+        "Started right after the DST switch. support is walking users through workaround logins which wastes hours."
     ),
     "Billing CSV Parser Failure": (
-        "I manage the customer billing workspace for our org (finance operations manager at a "
-        "design agency). Basically, exporting more than about 5,000 invoices to CSV always fails "
-        "with a 504. Our auditors asked why the reconciliations don't tie out."
+        "Second ticket I'm filing about this: I manage the customer billing workspace for our org (finance "
+        "operations manager at a design agency). Basically, exporting more than about 5,000 invoices to CSV "
+        "always fails with a 504. our auditors asked why the reconciliations don't tie out."
     ),
     "Slow Export Crash": (
-        "I'm the marketing operations manager here and I look after the insights platform. "
-        "Basically, any date range over 90 days fails the workbook export. CSV export of the "
-        "same range works, so we convert manually. Quarterly reporting now takes days."
+        "I'm the marketing operations manager here and I look after the insights platform. Basically, any date "
+        "range over 90 days fails the workbook export. CSV export of the same range works, so we convert "
+        "manually. quarterly reporting now takes days of manual conversion. We've worked around it for now "
+        "but it's not sustainable."
     ),
 }
 

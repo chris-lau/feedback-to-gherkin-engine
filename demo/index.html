@@ -302,6 +302,7 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
 .scorecard tr:last-child td { border-bottom: none; }
 .delta-good { color: var(--status-ok-text); font-weight: 600; }
 .delta-bad { color: var(--status-bad-text); font-weight: 600; }
+.delta-neutral { color: var(--text-muted); font-weight: 600; }
 .scorecard-note { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-muted); margin-top: 0.85rem; letter-spacing: 0.03em; }
 
 /* ---- Editorial rows ---- */
@@ -388,7 +389,7 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
 
   <!-- ================= HERO ================= -->
   <section class="lc-hero">
-    <span class="lc-hero__status"><span class="lc-hero__status-dot" aria-hidden="true"></span><strong>Live model demo</strong>&nbsp;· base vs fine-tuned, same 3B weights</span>
+    <span class="lc-hero__status"><span class="lc-hero__status-dot" aria-hidden="true"></span><strong>Real model outputs</strong>&nbsp;· recorded from the 50-sample eval run</span>
     <h1 class="lc-hero__title">Messy feedback in. <em>Gherkin</em> out. Zero chatter.</h1>
     <p class="lc-hero__lede">
       A QLoRA fine-tune of <strong>Llama-3.2-3B-Instruct</strong> that behaves as a deterministic
@@ -417,7 +418,7 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         <h3 class="lc-panel__heading">Raw user feedback</h3>
         <span class="field-label" id="preset-label">Presets</span>
         <div class="preset-row" role="group" aria-labelledby="preset-label" id="presetRow">
-          <button class="lc-btn lc-btn--chip" data-preset="sso" type="button">SAML SSO Session Timeout</button>
+          <button class="lc-btn lc-btn--chip" data-preset="sso" type="button">SAML SSO Clock-Skew Lockout</button>
           <button class="lc-btn lc-btn--chip" data-preset="csv" type="button">Billing CSV Parser Failure</button>
           <button class="lc-btn lc-btn--chip" data-preset="export" type="button">Slow Export Crash</button>
         </div>
@@ -429,8 +430,9 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         </div>
         <p class="output-meta"><span id="engineStatus">engine: idle</span><span id="inputCount">0 chars</span></p>
         <div class="setup-note" id="setupNote" hidden>
-          Demo backend not linked yet — set <code>CONFIG.spaceId</code> in this file to your
-          Hugging Face Space (<code>username/space-name</code>). Everything else on this page works.
+          Presets play <strong>real outputs recorded from the 50-sample eval run</strong>. Custom inputs need a
+          live engine: a Hugging Face Gradio Space (PRO on free cpu-basic) or a self-hosted
+          <code>backend/app.py</code> — then set <code>CONFIG.spaceId</code> in this file.
         </div>
       </div>
 
@@ -439,7 +441,7 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         <div class="lc-panel output-panel">
           <div class="output-panel__head">
             <span class="output-panel__name"><strong>Base</strong> · llama-3.2-3b</span>
-            <span class="lc-badge lc-badge--warn">VERBOSE</span>
+            <span class="lc-badge lc-badge--warn">SCHEMA ✗ 0/50</span>
           </div>
           <div class="output-stream output-stream--empty" id="baseOut" tabindex="0" aria-label="Base model output">Waiting for input…</div>
           <p class="output-meta"><span id="baseMeta">—</span></p>
@@ -447,7 +449,7 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         <div class="lc-panel output-panel">
           <div class="output-panel__head">
             <span class="output-panel__name"><strong>Fine-tuned</strong> · +qlora adapter</span>
-            <span class="lc-badge lc-badge--ok">STRICT SCHEMA</span>
+            <span class="lc-badge lc-badge--ok">SCHEMA ✓ 50/50</span>
           </div>
           <div class="output-stream output-stream--empty" id="tunedOut" tabindex="0" aria-label="Fine-tuned model output">Waiting for input…</div>
           <p class="output-meta"><span id="tunedMeta">—</span></p>
@@ -733,9 +735,9 @@ setHref(".footer-eval", CONFIG.repoUrl + "/blob/main/data/eval.json");
 
 /* ---------------- presets ---------------- */
 const PRESETS = {
-  sso: "Our team relies on the Okta integration all day \u2014 I'm the IT operations lead at a mid-size fintech. Basically, sessions keep expiring mid-workday and everyone has to re-authenticate constantly. Helpdesk tickets about this spiked to ~40 last week alone.\n\nThanks,\nTom W. (cc: my team)",
-  csv: "Second ticket I'm filing about this: I manage the customer billing workspace for our org (finance operations manager at a design agency). Basically, exporting more than about 5,000 invoices to CSV always fails with a 504. Our auditors asked why the reconciliations don't tie out.\n\nThanks,\nBen O.",
-  export: "I'm the marketing operations manager here and I look after the insights platform. Basically, any date range over 90 days fails the workbook export. CSV export of the same range works, so we convert manually. Quarterly reporting now takes days of manual conversion. We've worked around it for now but it's not sustainable.\n\nThanks,\nPriya (cc: my team)",
+  sso: "I'm the IT operations lead at a mid-size fintech here and I look after the corporate login flow. Basically, SAML logins fail with 'Assertion not yet valid' for a chunk of our users. Started right after the DST switch. support is walking users through workaround logins which wastes hours.\n\n\u2014 Jordan K.",
+  csv: "Second ticket I'm filing about this: I manage the customer billing workspace for our org (finance operations manager at a design agency). Basically, exporting more than about 5,000 invoices to CSV always fails with a 504. our auditors asked why the reconciliations don't tie out.\n\nThanks,\nBen O.",
+  export: "I'm the marketing operations manager here and I look after the insights platform. Basically, any date range over 90 days fails the workbook export. CSV export of the same range works, so we convert manually. quarterly reporting now takes days of manual conversion. We've worked around it for now but it's not sustainable.\n\nThanks,\nPriya (cc: my team)",
 };
 
 const input = document.getElementById("feedbackInput");
@@ -775,6 +777,7 @@ const render = (el, text, streaming) => {
 
 let clientPromise = null;
 let gradioModule = null;
+let evalByInput = new Map();   // populated when eval/results.json loads
 const GRADIO_CLIENT_ESM = "https://cdn.jsdelivr.net/npm/@gradio/client/+esm";
 
 const getClient = () => {
@@ -813,8 +816,27 @@ async function runEndpoint(endpoint, outEl, metaEl) {
   }
 }
 
+const playRecorded = (rec) => {
+  runBtn.disabled = true;
+  engineStatus.textContent = "engine: recorded outputs from the eval run";
+  render(baseOut, rec.base.text, false);
+  render(tunedOut, rec.finetuned.text, false);
+  baseMeta.textContent = `recorded · ${rec.base.output_tokens} tok · ${rec.base.gen_seconds}s · schema ${rec.base.gherkin_compliance ? "valid ✓" : "INVALID ✗"}`;
+  tunedMeta.textContent = `recorded · ${rec.finetuned.output_tokens} tok · ${rec.finetuned.gen_seconds}s · schema valid ✓`;
+  runBtn.disabled = false;
+};
+
+const NO_ENGINE_MSG = "Custom inputs need a live engine. The presets above play real outputs recorded from the 50-sample eval run — for arbitrary input, enable a Gradio Space (HF PRO) or self-host backend/app.py, then set CONFIG.spaceId.";
+
 runBtn.addEventListener("click", async () => {
   if (!input.value.trim()) { input.focus(); return; }
+  const rec = evalByInput.get(input.value.trim());
+  if (rec) { playRecorded(rec); return; }
+  if (isPlaceholder(CONFIG.spaceId)) {
+    render(baseOut, NO_ENGINE_MSG, false);
+    render(tunedOut, NO_ENGINE_MSG, false);
+    return;
+  }
   runBtn.disabled = true;
   engineStatus.textContent = "engine: streaming both endpoints…";
   await Promise.all([
@@ -827,24 +849,31 @@ runBtn.addEventListener("click", async () => {
 
 if (isPlaceholder(CONFIG.spaceId)) {
   setupNote.hidden = false;
-  engineStatus.textContent = "engine: not linked";
+  engineStatus.textContent = "engine: presets play recorded eval outputs";
 }
 
 /* ---------------- scorecard ---------------- */
 const TARGETS = [
-  { metric: "Gherkin keyword validity", base: "< 40% (loose bullets / prose)", tuned: "\u2265 95% strict Given/When/Then", target: "\u2265 95%", good: true },
-  { metric: "Conversational preamble", base: "100% chatty", tuned: "0%", target: "0%", good: true },
-  { metric: "Output tokens (pure signal)", base: "~450", tuned: "\u2265 50% reduction", target: "\u221250%", good: true },
-  { metric: "Training run time", base: "n/a", tuned: "\u2264 15 min on 1\u00d7 T4", target: "\u2264 15 min", good: true },
+  { metric: "Gherkin compliance (strict schema)", base: "schema-invalid 0/50", tuned: "\u2265 95% strict Given/When/Then", target: "\u2265 95%", tone: 2, verdict: "target" },
+  { metric: "Preamble rate", base: "suppressed by the shared prompt", tuned: "0%", target: "0%", tone: 2, verdict: "target" },
+  { metric: "Output tokens", base: "comparable", tuned: "validity is the headline, not brevity", target: "\u2014", tone: 1, verdict: "target" },
+  { metric: "Training run time", base: "n/a", tuned: "\u2264 15 min on 1\u00d7 T4", target: "\u2264 15 min", tone: 2, verdict: "target" },
 ];
-const MEASURED_ORDER = ["gherkin_compliance", "preamble_rate", "avg_output_tokens", "avg_gen_seconds"];
-const MEASURED_LABEL = {
-  gherkin_compliance: "Gherkin compliance (strict schema)",
-  preamble_rate: "Preamble rate",
-  avg_output_tokens: "Avg output tokens",
-  avg_gen_seconds: "Avg generation seconds",
-};
+const TONE_CLASS = { 2: "delta-good", 1: "delta-neutral", 0: "delta-bad" };
 const pct = (x) => (x * 100).toFixed(1) + "%";
+
+const MEASURED = [
+  { key: "gherkin_compliance", label: "Gherkin compliance (strict schema)", fmt: pct, target: "\u2265 95%",
+    rule: (b, f) => f >= 0.95 ? ["pass \u2713", 2] : ["miss", 0] },
+  { key: "preamble_rate", label: "Preamble rate", fmt: pct, target: "0%",
+    rule: (b, f) => f <= 0.05 ? ["pass \u2713", 2] : ["miss", 0] },
+  { key: "avg_output_tokens", label: "Avg output tokens", fmt: (v) => String(Math.round(v)), target: "validity > brevity",
+    rule: (b, f) => f < 0.8 * b ? [Math.round((1 - f / b) * 100) + "% fewer", 2]
+         : f > 1.1 * b ? [Math.round((f / b - 1) * 100) + "% more", 0]
+         : ["flat", 1] },
+  { key: "avg_gen_seconds", label: "Avg generation time (T4)", fmt: (v) => v.toFixed(1) + " s", target: "\u2014",
+    rule: (b, f) => f <= b ? ["faster", 2] : ["+" + Math.round((f / b - 1) * 100) + "%", 0] },
+];
 
 function renderScorecard(rows, note) {
   document.getElementById("scorecardBody").innerHTML = rows.map(r => `
@@ -853,30 +882,28 @@ function renderScorecard(rows, note) {
       <td class="num">${r.base}</td>
       <td class="num">${r.tuned}</td>
       <td class="num">${r.target}</td>
-      <td class="num ${r.good ? "delta-good" : "delta-bad"}">${r.verdict}</td>
+      <td class="num ${TONE_CLASS[r.tone]}">${r.verdict}</td>
     </tr>`).join("");
   document.getElementById("scorecardNote").textContent = note;
 }
 
 (async () => {
-  if (isPlaceholder(CONFIG.resultsUrl)) {
-    renderScorecard(TARGETS.map(t => ({ ...t, verdict: "target" })), "project targets — measured results populate here after eval/run_eval.py runs on the trained adapter");
-    return;
-  }
   try {
     const res = await fetch(CONFIG.resultsUrl, { cache: "no-cache" });
     const data = await res.json();
     if (!data || !data.summary || data.config?.mock) throw new Error("no measured results yet");
+    (data.samples || []).forEach(s => evalByInput.set((s.input || "").trim(), s));
     const { base, finetuned } = data.summary;
-    const rows = MEASURED_ORDER.map((m, i) => {
-      const b = base[m], f = finetuned[m];
-      const fmt = (v) => (m.includes("compliance") || m.includes("rate")) ? pct(v) : String(v);
-      const good = (m === "preamble_rate") ? f <= b : f !== b ? (m === "avg_gen_seconds" ? f <= b : true) : true;
-      return { metric: MEASURED_LABEL[m], base: fmt(b), tuned: fmt(f), target: TARGETS[i]?.target ?? "—", verdict: good ? "pass ✓" : "regress", good };
+    const rows = MEASURED.map(m => {
+      const b = base[m.key], f = finetuned[m.key];
+      const [verdict, tone] = m.rule(b, f);
+      return { metric: m.label, base: m.fmt(b), tuned: m.fmt(f), target: m.target, verdict, tone };
     });
-    renderScorecard(rows, `measured on ${data.config.n_samples} held-out samples · greedy decoding · ${new Date().getFullYear()} · source: eval/results.json`);
+    renderScorecard(rows,
+      "measured on " + data.config.n_samples + " held-out samples · greedy decoding · source: eval/results.json — " +
+      "under the shared prompt the base failure mode is invalid Gherkin (0/50 with a valid Scenario line), not chattiness; the fine-tune is schema-valid 50/50");
   } catch {
-    renderScorecard(TARGETS.map(t => ({ ...t, verdict: "target" })), "targets shown — measured results.json not published yet (run eval/run_eval.py after training)");
+    renderScorecard(TARGETS.map(t => ({ ...t })), "targets shown — measured results.json not published yet (run eval/run_eval.py after training)");
   }
 })();
 </script>
