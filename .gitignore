@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# macOS
+.DS_Store
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Regenerable intermediates (produced by data/generate_synthetic.py)
+data/raw/
+
+# Training artifacts
+outputs/
+lora-adapter/
+*.gguf
+wandb/
+
+# Secrets
+.env

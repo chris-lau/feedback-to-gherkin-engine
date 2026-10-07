@@ -1,0 +1,5 @@
+# Root requirements: only what the *local* data tooling needs (Python 3.10+).
+# Training runs in Google Colab (see notebooks/), serving on Hugging Face Spaces
+# (see backend/requirements.txt) — their deps are pinned in their own environments.
+
+openai>=1.40        # teacher-model distillation: python data/generate_synthetic.py --source api
