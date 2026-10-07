@@ -15,7 +15,13 @@ const SYSTEM_PROMPT =
   "'USER STORY:', 'ACCEPTANCE CRITERIA:'. The user story must follow the " +
   "pattern 'As a ..., I want ..., So that ...'. Acceptance criteria must use " +
   "strict Gherkin (Scenario:, Given, When, Then, And). Output only the three " +
-  "sections. No greetings, no explanations, no markdown.";
+  "sections. No greetings, no explanations, no markdown. " +
+  "Ground every statement in the feedback itself: reuse its concrete details " +
+  "(numbers, thresholds, error messages, component names) verbatim in the " +
+  "problem statement and acceptance criteria. Never invent numbers, error " +
+  "codes, component names, or personas that the feedback does not mention; " +
+  "when a detail is unknown, refer to it generically (e.g. 'the configured " +
+  "threshold').";
 
 const CORS = {
   "access-control-allow-origin": "*",
