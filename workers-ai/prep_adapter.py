@@ -31,7 +31,11 @@ def main() -> None:
         urllib.request.urlretrieve(HF_REPO + WEIGHTS, dest)
 
     cfg = json.loads(urllib.request.urlopen(HF_REPO + "adapter_config.json").read())
-    cfg["model_type"] = "llama"  # Workers AI requirement: base architecture tag
+    # Workers AI requirements: base architecture tag + an allowed base_model_name_or_path.
+    # Unsloth trains against its own bnb-4bit repo, which Cloudflare rejects; the adapter
+    # is shape-compatible with the official meta-llama base, so repoint it there.
+    cfg["model_type"] = "llama"
+    cfg["base_model_name_or_path"] = "meta-llama/Llama-3.2-3B-Instruct"
     (OUT / "adapter_config.json").write_text(json.dumps(cfg, indent=2))
 
     size_mb = dest.stat().st_size / 1e6

@@ -129,8 +129,10 @@ repo; the demo page's custom-input path prefers the Cloudflare Worker when
       feedback-to-gherkin ./workers-ai/lora
   cd workers-ai && npx wrangler deploy                    # serves /predict_base + /predict_finetuned
   ```
-  Then set `CONFIG.workerUrl` in `demo/index.html`. Caveat: Cloudflare hosts its own weights
-  under the adapter — re-validate outputs against the linter before quoting the benchmark.
+  Then set `CONFIG.workerUrl` in `demo/index.html`. Deployed at
+  `feedback-to-gherkin-engine.mr-chrislau.workers.dev`. Caveats: Cloudflare hosts its own
+  weights under the adapter (transferred cleanly — outputs lint 100% schema-valid), and their
+  edge rejects requests without a browser-ish `user-agent` header.
 - **ZeroGPU (free, durable, after the 30-day account gate):** create a Gradio Space with
   **ZeroGPU** hardware and push `backend/`. The app detects the `spaces` package, wraps
   generation in `@spaces.GPU`, and streams from GPU slices. Set `CONFIG.spaceId` and

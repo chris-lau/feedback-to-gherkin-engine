@@ -8,8 +8,7 @@
 // stream, which demo/index.html renders as it arrives.
 
 const BASE_MODEL = "@cf/meta/llama-3.2-3b-instruct";
-const LORA_MODEL = BASE_MODEL + "-lora";
-const FINETUNE_ID = "feedback-to-gherkin";
+const FINETUNE_ID = "feedback-to-gherkin-v2";
 const SYSTEM_PROMPT =
   "You are a requirements formatting engine. Convert the raw user feedback " +
   "into exactly three sections in this order: 'PROBLEM STATEMENT:', " +
@@ -56,7 +55,8 @@ async function infer(request, env, finetuned) {
   };
   if (finetuned) payload.lora = FINETUNE_ID;
 
-  const result = await env.AI.run(finetuned ? LORA_MODEL : BASE_MODEL, payload);
+  // Same model id for both endpoints: passing `lora` switches the adapter on.
+  const result = await env.AI.run(BASE_MODEL, payload);
 
   // Workers AI stream:true yields SSE lines; re-emit as a plain text stream.
   const text = new TransformStream();
