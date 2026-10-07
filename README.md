@@ -228,7 +228,8 @@ Where things stand:
 - [x] Notebook `HF_USERNAME` set to `mrchrislau`; Colab badge wired to this repo
 - [x] Run `notebooks/train_gherkin_qlora.ipynb` end to end on Colab — adapter live at [`mrchrislau/feedback-to-gherkin-lora`](https://huggingface.co/mrchrislau/feedback-to-gherkin-lora)
 - [x] Run `eval/run_eval.py --adapter mrchrislau/feedback-to-gherkin-lora` on the trained adapter; committed the generated `eval/results.json` — the demo scorecard renders the measured numbers
-- [ ] *Optional — free live inference:* create a Gradio Space on **ZeroGPU** hardware (free for personal accounts, 2 Spaces max), push `backend/`, then set `CONFIG.spaceId` in `demo/index.html`. Without it the demo plays recorded eval outputs.
+- [x] Live inference on Cloudflare Workers AI (BYO-LoRA, free tier) — deployed at `feedback-to-gherkin-engine.mr-chrislau.workers.dev`; adapter transfer lint-verified on unseen tickets
+- [ ] *Optional — ZeroGPU Space (free after the 30-day account gate):* create the Space, push `backend/`, set `CONFIG.spaceId` + `CONFIG.engine = "gradio"` for a second live engine; without any backend the demo plays recorded eval outputs
 - [ ] Embed/link the demo from the portfolio site
 
 ## License

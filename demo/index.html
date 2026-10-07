@@ -892,7 +892,9 @@ runBtn.addEventListener("click", async () => {
   runBtn.disabled = false;
 });
 
-if (isPlaceholder(CONFIG.spaceId)) {
+const liveEngineUp = (CONFIG.engine === "worker" && !isPlaceholder(CONFIG.workerUrl))
+  || !isPlaceholder(CONFIG.spaceId);
+if (!liveEngineUp) {
   setupNote.hidden = false;
   engineStatus.textContent = "engine: presets play recorded eval outputs";
 }
