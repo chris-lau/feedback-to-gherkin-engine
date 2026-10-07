@@ -114,16 +114,24 @@ modes that need no GPU: `python eval/run_eval.py --lint-only` and `--mock`.
 
 ### Phase 4 — serving
 
-Heads-up: Hugging Face now requires a **PRO subscription** for Gradio/Docker Spaces on free
-cpu-basic (only Static Spaces remain free). Two supported paths:
+Heads-up: Hugging Face requires a paid plan to *create* Gradio/Docker Spaces on cpu-basic
+(only Static Spaces are free for everyone). Free personal accounts can, however, host up to
+**2 Gradio Spaces on ZeroGPU** — which is the best free path anyway. All three modes work
+from the same `backend/app.py`, auto-detected:
 
-- **PRO:** create a Gradio Space, set `ADAPTER_REPO=mrchrislau/feedback-to-gherkin-lora`, push
-  `backend/`. Both endpoints stream token-by-token; one loaded model serves both engines by
-  toggling `model.disable_adapter()`.
-- **No-cost (shipped):** the demo page's presets play *recorded* outputs from
-  `eval/results.json` — real model behavior from the measured run, zero hosting. The live
-  streaming path activates automatically once `CONFIG.spaceId` points at a Space (PRO) or a
-  self-hosted `backend/app.py`.
+- **ZeroGPU (free, durable, recommended):** create a Gradio Space with **ZeroGPU** hardware,
+  push `backend/`. The app detects the `spaces` package, wraps generation in `@spaces.GPU`,
+  and streams from GPU slices (~1 s outputs vs ~9 s on CPU). Set `ADAPTER_REPO` if not using
+  the default. Then set `CONFIG.spaceId` in `demo/index.html` to activate the live path.
+- **Colab ephemeral (free, live one-offs):** in a GPU Colab run `SHARE=1 python backend/app.py`
+  (or `demo.launch(share=True)`) and paste the printed `*.gradio.live` URL into
+  `CONFIG.spaceId`. The tunnel dies with the notebook runtime and Colab's terms disallow
+  persistent serving — use it for screen-shares and recordings, never as a portfolio link.
+- **Anywhere else:** `python backend/app.py` runs on CPU fp32; set `PRECISION=bfloat16` on a
+  GPU box. Point `CONFIG.spaceId` at its public URL.
+
+Without any of these, the demo page plays recorded outputs from the eval run (no-cost path,
+already shipped).
 
 ### Phase 5 — portfolio demo
 
@@ -207,7 +215,7 @@ Where things stand:
 - [x] Notebook `HF_USERNAME` set to `mrchrislau`; Colab badge wired to this repo
 - [x] Run `notebooks/train_gherkin_qlora.ipynb` end to end on Colab — adapter live at [`mrchrislau/feedback-to-gherkin-lora`](https://huggingface.co/mrchrislau/feedback-to-gherkin-lora)
 - [x] Run `eval/run_eval.py --adapter mrchrislau/feedback-to-gherkin-lora` on the trained adapter; committed the generated `eval/results.json` — the demo scorecard renders the measured numbers
-- [ ] *Optional (HF PRO):* create the Gradio Space from `backend/` for live custom-input inference, then set `CONFIG.spaceId` in `demo/index.html` — without it the demo plays recorded eval outputs (no-cost path)
+- [ ] *Optional — free live inference:* create a Gradio Space on **ZeroGPU** hardware (free for personal accounts, 2 Spaces max), push `backend/`, then set `CONFIG.spaceId` in `demo/index.html`. Without it the demo plays recorded eval outputs.
 - [ ] Embed/link the demo from the portfolio site
 
 ## License

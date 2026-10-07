@@ -431,8 +431,9 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         <p class="output-meta"><span id="engineStatus">engine: idle</span><span id="inputCount">0 chars</span></p>
         <div class="setup-note" id="setupNote" hidden>
           Presets play <strong>real outputs recorded from the 50-sample eval run</strong>. Custom inputs need a
-          live engine: a Hugging Face Gradio Space (PRO on free cpu-basic) or a self-hosted
-          <code>backend/app.py</code> — then set <code>CONFIG.spaceId</code> in this file.
+          live engine: a Hugging Face Space on <strong>ZeroGPU</strong> hardware (free for personal accounts,
+          2 Spaces max), a self-hosted <code>backend/app.py</code>, or even a Colab
+          <code>SHARE=1</code> tunnel — then set <code>CONFIG.spaceId</code> in this file.
         </div>
       </div>
 

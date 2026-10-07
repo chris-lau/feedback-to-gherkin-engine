@@ -1,29 +1,42 @@
-"""Hugging Face Space backend: dual-endpoint streaming inference.
+"""Dual-endpoint streaming inference backend — one file, three deployment modes.
 
-Serves ONE copy of Llama-3.2-3B-Instruct with the QLoRA adapter attached, and
-exposes two named API endpoints:
+Serves ONE copy of Llama-3.2-3B-Instruct with the QLoRA adapter attached, and exposes
+two named API endpoints:
 
   /predict_base      generation with the adapter disabled  (`model.disable_adapter()`)
   /predict_finetuned generation with the adapter active
 
 Both stream token-by-token via TextIteratorStreamer. The portfolio site
-(demo/index.html) calls these through @gradio/client, which the Gradio server
-permits cross-origin (its API routes send permissive CORS headers).
+(demo/index.html) calls these through @gradio/client, which accepts either a
+`owner/space` id or any Gradio server URL (e.g. a *.gradio.live tunnel).
 
-Space setup (CPU basic):
-  - SDK: Gradio. Secrets/env: ADAPTER_REPO (default below).
-  - fp32 keeps 3B weights + KV cache inside 16 GB; expect a few tokens/sec —
-    streaming keeps the UX acceptable. For production latency, upgrade to
-  ZeroGPU and set PRECISION=bfloat16.
+Deployment modes (auto-detected, no code changes between them):
 
-Run locally:  python backend/app.py   (expects an adapter dir or HF repo)
+  1. HF Space on ZeroGPU (free for personal accounts, 2 Spaces max):
+     create the Space with Gradio SDK + ZeroGPU hardware and push this folder.
+     The `spaces` package present in that image is picked up automatically;
+     generation is wrapped in @spaces.GPU and served on GPU slices.
+  2. Colab ephemeral link: with a GPU runtime,
+         SHARE=1 python backend/app.py
+     launches with share=True and prints a temporary *.gradio.live URL
+     (lives only as long as the notebook runtime; Colab's terms disallow
+     persistent serving — for live one-offs, not a portfolio link).
+  3. Anywhere else: plain `python backend/app.py` runs on CPU (fp32) or GPU
+     (PRECISION=bfloat16 recommended); point CONFIG.spaceId at its public URL.
 """
 
 from __future__ import annotations
 
 import contextlib
 import functools
+import os
 import threading
+
+# `spaces` must be imported before anything initializes CUDA (ZeroGPU requirement).
+try:
+    import spaces  # present only on HF ZeroGPU images / if pip-installed
+except ImportError:
+    spaces = None
 
 import gradio as gr
 import torch
@@ -33,11 +46,18 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStream
 # --- Configuration ----------------------------------------------------------
 
 BASE_MODEL = "unsloth/Llama-3.2-3B-Instruct"
-ADAPTER_REPO = "mrchrislau/feedback-to-gherkin-lora"   # or set the ADAPTER_REPO env var
-PRECISION = {"float32": torch.float32, "bfloat16": torch.bfloat16, "float16": torch.float16}[
-    __import__("os").environ.get("PRECISION", "float32")
-]
+ADAPTER_REPO = os.environ.get("ADAPTER_REPO", "mrchrislau/feedback-to-gherkin-lora")
 MAX_NEW_TOKENS = 512
+
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+_DTYPE_OVERRIDE = os.environ.get("PRECISION")  # float32 | bfloat16 | float16 | auto
+if _DTYPE_OVERRIDE in {"float32", "bfloat16", "float16"}:
+    DTYPE = getattr(torch, _DTYPE_OVERRIDE)
+elif DEVICE == "cuda":
+    # T4 (Turing) has no fast bf16; ZeroGPU GPUs do.
+    DTYPE = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+else:
+    DTYPE = torch.float32
 
 SYSTEM_PROMPT = (
     "You are a requirements formatting engine. Convert the raw user feedback "
@@ -69,9 +89,9 @@ PRESETS = {
 
 # --- Model ------------------------------------------------------------------
 
-print(f"loading {BASE_MODEL} ({PRECISION}) + adapter {ADAPTER_REPO} ...")
+print(f"loading {BASE_MODEL} on {DEVICE} ({DTYPE}) + adapter {ADAPTER_REPO} ...")
 tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
-model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, torch_dtype=PRECISION, device_map="cpu")
+model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, torch_dtype=DTYPE, device_map=DEVICE)
 model = PeftModel.from_pretrained(model, ADAPTER_REPO)
 model.eval()
 print("model ready")
@@ -88,7 +108,7 @@ def _generate(feedback: str, use_adapter: bool, streamer: TextIteratorStreamer) 
     ]
     inputs = tokenizer.apply_chat_template(
         messages, add_generation_prompt=True, return_tensors="pt"
-    )
+    ).to(model.device)
     with ctx, torch.inference_mode():
         model.generate(
             input_ids=inputs,
@@ -101,7 +121,7 @@ def _generate(feedback: str, use_adapter: bool, streamer: TextIteratorStreamer) 
         )
 
 
-def stream_generate(feedback: str, use_adapter: bool):
+def _stream_generate(feedback: str, use_adapter: bool):
     feedback = (feedback or "").strip()
     if not feedback:
         yield "Paste some raw user feedback on the left first."
@@ -114,6 +134,12 @@ def stream_generate(feedback: str, use_adapter: bool):
         acc += delta
         yield acc
     worker.join()
+
+
+if spaces is not None:  # ZeroGPU: hold a GPU slice for the whole streamed generation
+    stream_generate = spaces.GPU(duration=120)(_stream_generate)
+else:
+    stream_generate = _stream_generate
 
 
 def predict_base(feedback: str):
@@ -146,11 +172,11 @@ with gr.Blocks(title="Feedback → Gherkin Engine") as demo:
             btn_base = gr.Button("Run base model", variant="secondary")
             btn_tuned = gr.Button("Run fine-tuned model", variant="primary")
         with gr.Column():
-            out_base = gr.Textbox(label="Base (verbose / chatty)", lines=18)
-            out_tuned = gr.Textbox(label="Fine-tuned (strict schema)", lines=18)
+            out_base = gr.Textbox(label="Base (schema-invalid without the adapter)", lines=18)
+            out_tuned = gr.Textbox(label="Fine-tuned (strict Gherkin schema)", lines=18)
     btn_base.click(predict_base, [inp], [out_base], api_name="predict_base")
     btn_tuned.click(predict_finetuned, [inp], [out_tuned], api_name="predict_finetuned")
 
 demo.queue(default_concurrency_limit=1)
 if __name__ == "__main__":
-    demo.launch(ssr_mode=False)
+    demo.launch(ssr_mode=False, share=os.environ.get("SHARE") == "1")
