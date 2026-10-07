@@ -191,7 +191,7 @@ Where things stand:
 
 - [x] Push this repo to GitHub — `chris-lau/feedback-to-gherkin-engine`
 - [x] Notebook `HF_USERNAME` set to `mrchrislau`; Colab badge wired to this repo
-- [ ] Run `notebooks/train_gherkin_qlora.ipynb` end to end on Colab (add an `HF_TOKEN` write secret)
+- [x] Run `notebooks/train_gherkin_qlora.ipynb` end to end on Colab — adapter live at [`mrchrislau/feedback-to-gherkin-lora`](https://huggingface.co/mrchrislau/feedback-to-gherkin-lora)
 - [ ] Run `eval/run_eval.py --adapter mrchrislau/feedback-to-gherkin-lora` against the trained adapter; commit the generated `eval/results.json`
 - [ ] Create the Gradio Space from `backend/` (set `ADAPTER_REPO=mrchrislau/feedback-to-gherkin-lora`), then set `CONFIG.spaceId` in `demo/index.html`
 - [ ] Embed/link the demo from the portfolio site
