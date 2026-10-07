@@ -12,6 +12,9 @@ __pycache__/
 # Regenerable intermediates (produced by data/generate_synthetic.py)
 data/raw/
 
+# Workers AI adapter staging (downloaded by workers-ai/prep_adapter.py, ~97MB)
+workers-ai/lora/
+
 # Training artifacts
 outputs/
 lora-adapter/

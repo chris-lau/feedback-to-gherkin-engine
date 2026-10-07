@@ -116,17 +116,28 @@ modes that need no GPU: `python eval/run_eval.py --lint-only` and `--mock`.
 
 Heads-up: Hugging Face requires a paid plan to *create* Gradio/Docker Spaces on cpu-basic
 (only Static Spaces are free for everyone). Free personal accounts can, however, host up to
-**2 Gradio Spaces on ZeroGPU** — which is the best free path anyway. All three modes work
-from the same `backend/app.py`, auto-detected:
+**2 Gradio Spaces on ZeroGPU** once the account is 30 days old. All modes work from the same
+repo; the demo page's custom-input path prefers the Cloudflare Worker when
+`CONFIG.engine = "worker"`:
 
-- **ZeroGPU (free, durable, recommended):** create a Gradio Space with **ZeroGPU** hardware,
-  push `backend/`. The app detects the `spaces` package, wraps generation in `@spaces.GPU`,
-  and streams from GPU slices (~1 s outputs vs ~9 s on CPU). Set `ADAPTER_REPO` if not using
-  the default. Then set `CONFIG.spaceId` in `demo/index.html` to activate the live path.
+- **Cloudflare Workers AI (free tier, durable, available today):** BYO-LoRA on
+  `@cf/meta/llama-3.2-3b-instruct`. Prepare the adapter, create the fine-tune, deploy:
+  ```bash
+  python3 workers-ai/prep_adapter.py                      # downloads adapter, injects model_type
+  npx wrangler login
+  npx wrangler ai finetune create @cf/meta/llama-3.2-3b-instruct-lora \
+      feedback-to-gherkin ./workers-ai/lora
+  cd workers-ai && npx wrangler deploy                    # serves /predict_base + /predict_finetuned
+  ```
+  Then set `CONFIG.workerUrl` in `demo/index.html`. Caveat: Cloudflare hosts its own weights
+  under the adapter — re-validate outputs against the linter before quoting the benchmark.
+- **ZeroGPU (free, durable, after the 30-day account gate):** create a Gradio Space with
+  **ZeroGPU** hardware and push `backend/`. The app detects the `spaces` package, wraps
+  generation in `@spaces.GPU`, and streams from GPU slices. Set `CONFIG.spaceId` and
+  `CONFIG.engine = "gradio"`.
 - **Colab ephemeral (free, live one-offs):** in a GPU Colab run `SHARE=1 python backend/app.py`
-  (or `demo.launch(share=True)`) and paste the printed `*.gradio.live` URL into
-  `CONFIG.spaceId`. The tunnel dies with the notebook runtime and Colab's terms disallow
-  persistent serving — use it for screen-shares and recordings, never as a portfolio link.
+  and paste the `*.gradio.live` URL into `CONFIG.spaceId`. Dies with the notebook runtime;
+  Colab's terms disallow persistent serving — never use as a portfolio link.
 - **Anywhere else:** `python backend/app.py` runs on CPU fp32; set `PRECISION=bfloat16` on a
   GPU box. Point `CONFIG.spaceId` at its public URL.
 

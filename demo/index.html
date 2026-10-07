@@ -430,10 +430,10 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
         </div>
         <p class="output-meta"><span id="engineStatus">engine: idle</span><span id="inputCount">0 chars</span></p>
         <div class="setup-note" id="setupNote" hidden>
-          Presets play <strong>real outputs recorded from the 50-sample eval run</strong>. Custom inputs need a
-          live engine: a Hugging Face Space on <strong>ZeroGPU</strong> hardware (free for personal accounts,
-          2 Spaces max), a self-hosted <code>backend/app.py</code>, or even a Colab
-          <code>SHARE=1</code> tunnel — then set <code>CONFIG.spaceId</code> in this file.
+          Presets play <strong>real outputs recorded from the 50-sample eval run</strong>. Custom inputs run live
+          once a backend is deployed: the Cloudflare Worker (Workers AI BYO-LoRA — set
+          <code>CONFIG.workerUrl</code>), a ZeroGPU Space or Colab <code>SHARE=1</code> tunnel (set
+          <code>CONFIG.spaceId</code>). See README Phase 4.
         </div>
       </div>
 
@@ -695,6 +695,8 @@ textarea.lc-textarea:focus { outline: none; border-color: var(--accent-primary);
    ============================================================ */
 const CONFIG = {
   spaceId:   "your-username/feedback-to-gherkin-engine",           // TODO: set after creating the HF Space
+  engine:    "worker",                                             // "worker" | "gradio" for custom inputs
+  workerUrl: "https://feedback-to-gherkin-engine.your-username.workers.dev", // TODO: after `wrangler deploy`
   repoUrl:   "https://github.com/chris-lau/feedback-to-gherkin-engine",
   resultsUrl:"https://raw.githubusercontent.com/chris-lau/feedback-to-gherkin-engine/main/eval/results.json",
   evalSetUrl:"https://raw.githubusercontent.com/chris-lau/feedback-to-gherkin-engine/main/data/eval.json",
@@ -828,12 +830,53 @@ const playRecorded = (rec) => {
   runBtn.disabled = false;
 };
 
-const NO_ENGINE_MSG = "Custom inputs need a live engine. The presets above play real outputs recorded from the 50-sample eval run — for arbitrary input, enable a Gradio Space (HF PRO) or self-host backend/app.py, then set CONFIG.spaceId.";
+async function runWorker(endpoint, outEl, metaEl) {
+  render(outEl, "", true);
+  metaEl.textContent = "streaming…";
+  const t0 = performance.now();
+  try {
+    const res = await fetch(CONFIG.workerUrl.replace(/\/+$/, "") + endpoint, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ feedback: input.value.trim() }),
+    });
+    if (!res.ok || !res.body) throw new Error("HTTP " + res.status);
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let acc = "";
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      acc += dec.decode(value, { stream: true });
+      render(outEl, acc, true);
+    }
+    render(outEl, acc, false);
+    metaEl.textContent = `${acc.length} chars · ${((performance.now() - t0) / 1000).toFixed(1)}s`;
+  } catch (err) {
+    outEl.classList.add("output-stream--empty");
+    outEl.textContent = "Engine unreachable — see the note under the input panel.";
+    metaEl.textContent = "error";
+    console.error(endpoint, err);
+  }
+}
+
+const NO_ENGINE_MSG = "Custom inputs need a live engine. The presets above play real outputs recorded from the 50-sample eval run — deploy the Workers AI backend (see README Phase 4) or set CONFIG.spaceId to a Gradio endpoint, then update CONFIG.";
 
 runBtn.addEventListener("click", async () => {
   if (!input.value.trim()) { input.focus(); return; }
   const rec = evalByInput.get(input.value.trim());
   if (rec) { playRecorded(rec); return; }
+  if (CONFIG.engine === "worker" && !isPlaceholder(CONFIG.workerUrl)) {
+    runBtn.disabled = true;
+    engineStatus.textContent = "engine: cloudflare workers ai";
+    await Promise.all([
+      runWorker("/predict_base", baseOut, baseMeta),
+      runWorker("/predict_finetuned", tunedOut, tunedMeta),
+    ]);
+    engineStatus.textContent = "engine: idle";
+    runBtn.disabled = false;
+    return;
+  }
   if (isPlaceholder(CONFIG.spaceId)) {
     render(baseOut, NO_ENGINE_MSG, false);
     render(tunedOut, NO_ENGINE_MSG, false);

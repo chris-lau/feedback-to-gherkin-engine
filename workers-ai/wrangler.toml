@@ -1,0 +1,6 @@
+name = "feedback-to-gherkin-engine"
+main = "worker.js"
+compatibility_date = "2024-12-01"
+
+[ai]
+binding = "AI"
