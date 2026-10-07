@@ -696,6 +696,7 @@ const CONFIG = {
   spaceId:   "your-username/feedback-to-gherkin-engine",           // TODO: set after creating the HF Space
   repoUrl:   "https://github.com/chris-lau/feedback-to-gherkin-engine",
   resultsUrl:"https://raw.githubusercontent.com/chris-lau/feedback-to-gherkin-engine/main/eval/results.json",
+  evalSetUrl:"https://raw.githubusercontent.com/chris-lau/feedback-to-gherkin-engine/main/data/eval.json",
   adapterUrl:"https://huggingface.co/mrchrislau/feedback-to-gherkin-lora",
   email:     "hello@chris.dev",
 };
@@ -818,7 +819,7 @@ async function runEndpoint(endpoint, outEl, metaEl) {
 
 const playRecorded = (rec) => {
   runBtn.disabled = true;
-  engineStatus.textContent = "engine: recorded outputs from the eval run";
+  engineStatus.textContent = "engine: recorded eval outputs · " + rec.id;
   render(baseOut, rec.base.text, false);
   render(tunedOut, rec.finetuned.text, false);
   baseMeta.textContent = `recorded · ${rec.base.output_tokens} tok · ${rec.base.gen_seconds}s · schema ${rec.base.gherkin_compliance ? "valid ✓" : "INVALID ✗"}`;
@@ -889,10 +890,20 @@ function renderScorecard(rows, note) {
 
 (async () => {
   try {
-    const res = await fetch(CONFIG.resultsUrl, { cache: "no-cache" });
+    const [res, evres] = await Promise.all([
+      fetch(CONFIG.resultsUrl, { cache: "no-cache" }),
+      fetch(CONFIG.evalSetUrl, { cache: "no-cache" }).catch(() => null),
+    ]);
     const data = await res.json();
     if (!data || !data.summary || data.config?.mock) throw new Error("no measured results yet");
-    (data.samples || []).forEach(s => evalByInput.set((s.input || "").trim(), s));
+    const byId = new Map((data.samples || []).map(s => [s.id, s]));
+    if (evres && evres.ok) {
+      const ev = await evres.json();
+      (Array.isArray(ev) ? ev : []).forEach(e => {
+        const s = byId.get(e.id);
+        if (s && e.input) evalByInput.set(e.input.trim(), { ...s, input: e.input, groundTruth: e.output });
+      });
+    }
     const { base, finetuned } = data.summary;
     const rows = MEASURED.map(m => {
       const b = base[m.key], f = finetuned[m.key];
